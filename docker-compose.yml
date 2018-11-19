@@ -23,12 +23,12 @@ services:
     env_file:
       - ./.env
     ports:
-      - 9000:5000
+      - 9000:80
     depends_on:
       - db
+    command: ["dotnet", "run", "--project=Atanet.WebApi"]
     networks:
       - default
-    command: ["dotnet", "run", "--project=Atanet.WebApi"]
 
 networks:
   default:
