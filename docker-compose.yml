@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  db:
+    container_name: atanet-db
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - atanet-volume:/var/lib/mysql
+    restart: always
+    ports:
+      - 9001:3306
+    env_file:
+      - ./.env
+    networks:
+      - default
+
+  api:
+    container_name: atanet-api
+    image: atanet-api
+    build:
+      context: ./api
+    env_file:
+      - ./.env
+    ports:
+      - 9000:5000
+    depends_on:
+      - db
+    networks:
+      - default
+    command: ["dotnet", "run", "--project=Atanet.WebApi"]
+
+networks:
+  default:
+    external:
+      name: atanet-network
+
+volumes:
+  atanet-volume:
+    external: true
