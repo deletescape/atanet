@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
+
+
 import { SnackbarService } from './snackbar.service';
 import * as moment from 'moment';
 import { Comment, File, BadRequest } from '../model';
@@ -10,7 +10,7 @@ declare type ConstructorType = { new(): any };
 
 @Injectable()
 export class AtanetHttpService {
-  private readonly baseUri: string = '/atanet/api/';
+  private readonly baseUri: string = 'http://localhost:9000/api/';
   private readonly propertyAdapters: { propertyName: string, constructor: ConstructorType, isArray: boolean }[] = [];
 
   constructor(private httpClient: HttpClient, private snackbarService: SnackbarService) {

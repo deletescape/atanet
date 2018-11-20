@@ -1,8 +1,8 @@
+
+import {interval as observableInterval,  Observable ,  Subscription } from 'rxjs';
 import { Component, OnInit, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { Post } from '../../model/post.model';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/interval';
+
 import { Comment } from '../../model/comment.model';
 import { MatExpansionPanel } from '@angular/material';
 import { FilterCommentService, CreateCommentService, LocationService, SnackbarService } from '../../services';
@@ -38,8 +38,8 @@ export class CommentsComponent implements OnInit {
     private createCommentService: CreateCommentService,
     private locationService: LocationService,
     private snackbarService: SnackbarService) {
-    this._previewTimer = Observable.interval(1500);
-    this._commentTimer = Observable.interval(2000);
+    this._previewTimer = observableInterval(1500);
+    this._commentTimer = observableInterval(2000);
   }
 
   @Input('post')
