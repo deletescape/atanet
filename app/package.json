@@ -23,8 +23,6 @@
     "@angular/platform-browser": "~7.0.4",
     "@angular/platform-browser-dynamic": "~7.0.4",
     "@angular/router": "~7.0.4",
-    "angular2-cookie": "~1.2.6",
-    "angular2-masonry": "~0.4.0",
     "core-js": "~2.5.7",
     "moment": "~2.22.2",
     "rxjs": "^6.3.3",

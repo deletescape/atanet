@@ -1,13 +1,21 @@
-FROM node:9.6.1
+FROM node:8-alpine as builder
 
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
 
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
-COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install -g @angular/cli@7.0.6
+RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
 
-COPY . /usr/src/app
+WORKDIR /ng-app
 
+COPY . .
+
+RUN $(npm bin)/ng build --prod
+
+FROM nginx:1.13.3-alpine
+
+COPY nginx/default.conf /etc/nginx/conf.d/
+
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=builder /ng-app/dist /usr/share/nginx/html

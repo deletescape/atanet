@@ -4,7 +4,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { GlobalErrorHandler } from './global-error-handler';
-import { CookieService, CookieOptions } from 'angular2-cookie/core';
 import {
   MatButtonModule,
   MatToolbarModule,
@@ -30,6 +29,7 @@ import {
 import * as comp from './components';
 import * as serv from './services';
 import * as pipe from './pipes';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -51,6 +51,7 @@ import * as pipe from './pipes';
     comp.CreateFileComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
@@ -76,7 +77,6 @@ import * as pipe from './pipes';
     MatListModule
   ],
   providers: [
-    CookieService,
     serv.CreatePostService,
     serv.AtanetHttpService,
     {
@@ -90,10 +90,6 @@ import * as pipe from './pipes';
     serv.LocationService,
     serv.FilterCommentService,
     serv.CreateCommentService,
-    {
-      provide: CookieOptions,
-      useValue: {}
-    },
     serv.FileService
   ],
   entryComponents: [

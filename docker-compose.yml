@@ -9,10 +9,10 @@ services:
     env_file:
       - ./.env
     ports:
-      - 9003:80
+      - 9002:80
     depends_on:
       - api
-    command: ["ng", "serve", "--host", "0.0.0.0"]
+    command: ["nginx", "-g", "daemon off;"]
     networks:
       - default
 

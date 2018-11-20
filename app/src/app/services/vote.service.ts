@@ -1,8 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AtanetHttpService } from './atanet-http.service';
 import { CreatedResult } from '../model/created-result.model';
-import { CookieService } from 'angular2-cookie/core';
-import { CookieOptions } from 'angular2-cookie/services';
 import * as moment from 'moment';
 
 @Injectable()
@@ -11,10 +9,7 @@ export class VoteService {
   private readonly upVote = 1;
   private votedPosts: number[] = new Array<number>();
 
-  constructor(private httpService: AtanetHttpService,
-              private cookieService: CookieService) {
-    const cookie = this.cookieService.getObject('voted');
-    this.votedPosts = cookie ? <number[]>cookie : new Array<number>();
+  constructor(private httpService: AtanetHttpService) {
   }
 
   public async upvote(postId: number): Promise<number> {
@@ -33,9 +28,6 @@ export class VoteService {
     const url = `Posts/${postId}/Votes?state=${value}`;
     const result = await this.httpService.post(url, {}, CreatedResult);
     this.votedPosts.push(postId);
-    this.cookieService.putObject('voted', this.votedPosts, new CookieOptions({
-      expires: moment(new Date()).add(10000, 'd').toDate()
-    }));
     return result.createdId;
   }
 }
