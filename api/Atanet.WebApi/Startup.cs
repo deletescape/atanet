@@ -34,6 +34,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Data.SqlClient;
+    using System.Net.NetworkInformation;
 
     public class Startup
     {
@@ -78,7 +79,6 @@
             mvc.AddMvcOptions(o => o.Filters.Add(typeof(GlobalExceptionFilter)));
             services.AddSwaggerGen(x => x.OperationFilter<SwaggerFilter>());
             var connectionString = new ConnectionStringBuilder().ConstructConnectionStringFromEnvironment();
-            Console.WriteLine(connectionString);
             services.AddDbContext<AtanetDbContext>(options =>
             {
                 options.UseMySql(connectionString);
