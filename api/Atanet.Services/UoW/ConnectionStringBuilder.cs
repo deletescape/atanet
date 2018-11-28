@@ -7,8 +7,6 @@ namespace Atanet.Services.UoW
 
     public class ConnectionStringBuilder : IConnectionStringBuilder
     {
-        public const string HostName = "atanet-db";
-
         public string ConstructConnectionStringFromEnvironment()
         {
             var gateway = GetDefaultGateway();

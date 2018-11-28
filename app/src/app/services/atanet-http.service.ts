@@ -10,7 +10,7 @@ declare type ConstructorType = { new(): any };
 
 @Injectable()
 export class AtanetHttpService {
-  private readonly baseUri: string = 'http://localhost:9000/api/';
+  private readonly baseUri: string = '${API_URL}';
   private readonly propertyAdapters: { propertyName: string, constructor: ConstructorType, isArray: boolean }[] = [];
 
   constructor(private httpClient: HttpClient, private snackbarService: SnackbarService) {

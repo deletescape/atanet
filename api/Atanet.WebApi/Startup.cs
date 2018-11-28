@@ -33,6 +33,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Data.SqlClient;
 
     public class Startup
     {
@@ -77,6 +78,7 @@
             mvc.AddMvcOptions(o => o.Filters.Add(typeof(GlobalExceptionFilter)));
             services.AddSwaggerGen(x => x.OperationFilter<SwaggerFilter>());
             var connectionString = new ConnectionStringBuilder().ConstructConnectionStringFromEnvironment();
+            Console.WriteLine(connectionString);
             services.AddDbContext<AtanetDbContext>(options =>
             {
                 options.UseMySql(connectionString);
@@ -109,7 +111,8 @@
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             // Specify URL here, if it should run under a sub-url
-            app.Map("", x => this.ConfigureCore(x, env, serviceProvider));
+            const string subUrl = "";
+            app.Map(subUrl, x => this.ConfigureCore(x, env, serviceProvider));
         }
 
         private void ConfigureCore(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)

@@ -1,4 +1,4 @@
-FROM node:8-alpine as builder
+FROM node:8 as builder
 
 COPY package.json package-lock.json ./
 
@@ -9,6 +9,11 @@ RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
 WORKDIR /ng-app
 
 COPY . .
+
+RUN apt-get update
+RUN apt-get install -y gettext-base
+ENV API_URL $API_URL
+RUN envsubst < ./src/app/services/atanet-http.service.ts | tee ./src/app/services/atanet-http.service.ts
 
 RUN $(npm bin)/ng build --prod
 

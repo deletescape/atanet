@@ -10,7 +10,7 @@ The technologies used in this project are ASP.NET Core, Flask, TensorFlow and An
 
 Add `.env` file
 
-`docker-compose up` 
+`docker-compose up`
 
 Connect to db:
 `mysql -u atanet -h 172.19.0.1 -P 9001 -D Atanet -p`

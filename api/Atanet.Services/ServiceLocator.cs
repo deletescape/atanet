@@ -2,6 +2,7 @@
 {
     using System;
 
+    // Avoid using this class
     public static class ServiceLocator
     {
         private static Func<IServiceProvider> serviceProvider;
