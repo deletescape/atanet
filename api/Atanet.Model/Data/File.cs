@@ -13,8 +13,6 @@
 
         public byte[] Data { get; set; }
 
-        public string Link { get; set; }
-
         public DateTime Created { get; set; }
     }
 }

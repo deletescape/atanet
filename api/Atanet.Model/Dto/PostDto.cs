@@ -12,10 +12,6 @@
 
         public long VoteCount { get; set; }
 
-        public double Latitude { get; set; }
-
-        public double Longitude { get; set; }
-
         public DateTime Created { get; set; }
 
         public CommentDto[] Comments { get; set; }

@@ -56,13 +56,6 @@
             public static readonly PropertyName FileId = new PropertyName("FILE_ID");
         }
 
-        public static class Vote
-        {
-            public static readonly PropertyName Id = new PropertyName("ID");
-
-            public static readonly PropertyName VoteState = new PropertyName("STATE");
-        }
-
         public static class Filter
         {
             public static readonly PropertyName PageSize = new PropertyName("PAGE_SIZE");
@@ -95,19 +88,6 @@
             public static readonly PropertyName FileName = new PropertyName("FILE_NAME");
 
             public static readonly PropertyName ContentType = new PropertyName("CONTENT_TYPE");
-        }
-
-        public static class Account
-        {
-            public static readonly PropertyName Id = new PropertyName("ACCOUNT_ID");
-
-            public static readonly PropertyName Password = new PropertyName("PASSWORD");
-
-            public static readonly PropertyName Email = new PropertyName("EMAIL");
-
-            public static readonly PropertyName FirstName = new PropertyName("FIRST_NAME");
-
-            public static readonly PropertyName LastName = new PropertyName("LAST_NAME");
         }
     }
 }

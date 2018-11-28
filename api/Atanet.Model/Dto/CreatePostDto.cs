@@ -2,14 +2,10 @@
 {
     using Atanet.Model.Interfaces;
 
-    public class CreatePostDto : ILocatable
+    public class CreatePostDto
     {
         public string Text { get; set; }
 
-        public double Longitude { get; set; }
-
-        public double Latitude { get; set; }
-
-        public long? FileId { get; set; }
+        public long PictureId { get; set; }
     }
 }

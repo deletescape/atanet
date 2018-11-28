@@ -3,20 +3,22 @@
     using Atanet.Model.Interfaces;
     using System;
 
-    public class Post : IIdentifiable, ICreated, ILocatable
+    public class Post : IIdentifiable, ICreated
     {
         public long Id { get; set; }
 
         public string Text { get; set; }
 
-        public double Longitude { get; set; }
+        public long PictureId { get; set; }
 
-        public double Latitude { get; set; }
-
-        public long? FileId { get; set; }
-
-        public File File { get; set; }
+        public File Picture { get; set; }
 
         public DateTime Created { get; set; }
+
+        public float Sentiment { get; set; }
+
+        public long UserId { get; set; }
+
+        public User User { get; set; }
     }
 }

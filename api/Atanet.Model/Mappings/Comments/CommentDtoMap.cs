@@ -11,8 +11,6 @@
             this.CreateMap<Comment, CommentDto>()
                 .ForMember(x => x.Created, x => x.MapFrom(p => p.Created))
                 .ForMember(x => x.Id, x => x.MapFrom(p => p.Id))
-                .ForMember(x => x.Latitude, x => x.MapFrom(p => p.Latitude))
-                .ForMember(x => x.Longitude, x => x.MapFrom(p => p.Longitude))
                 .ForMember(x => x.Text, x => x.MapFrom(p => p.Text))
                 .ForMember(x => x.PostId, x => x.MapFrom(p => p.PostId))
                 .ReverseMap();

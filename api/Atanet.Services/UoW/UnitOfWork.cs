@@ -96,8 +96,8 @@
         private void RegisterRepositories()
         {
             this.repositories.Add(typeof(Post), typeof(Repository<Post>));
-            this.repositories.Add(typeof(Vote), typeof(Repository<Vote>));
-            this.repositories.Add(typeof(LocationName), typeof(Repository<LocationName>));
+            this.repositories.Add(typeof(PostReaction), typeof(Repository<PostReaction>));
+            this.repositories.Add(typeof(User), typeof(Repository<User>));
             this.repositories.Add(typeof(Comment), typeof(Repository<Comment>));
             this.repositories.Add(typeof(File), typeof(Repository<File>));
         }

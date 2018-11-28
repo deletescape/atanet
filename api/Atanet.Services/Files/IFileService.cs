@@ -11,8 +11,6 @@
 
         FileInfoDto GetFileInfo(long id);
 
-        long CreateLinkedFile(CreateLinkedFileDto dto);
-
         long CreateFile(IFormFile file);
     }
 }

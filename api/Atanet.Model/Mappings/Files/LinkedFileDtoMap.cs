@@ -9,7 +9,6 @@
         public LinkedFileDtoMap()
         {
             this.CreateMap<CreateLinkedFileDto, File>()
-                .ForMember(x => x.Link, x => x.MapFrom(p => p.Link))
                 .ForMember(x => x.FileName, x => x.Ignore())
                 .ForMember(x => x.ContentType, x => x.Ignore())
                 .ForMember(x => x.Created, x => x.Ignore())

@@ -11,7 +11,5 @@
         public string ContentType { get; set; }
 
         public DateTime Created { get; set; }
-
-        public string Link { get; set; }
     }
 }

@@ -12,10 +12,8 @@
                 .ForMember(x => x.Created, x => x.Ignore())
                 .ForMember(x => x.Id, x => x.Ignore())
                 .ForMember(x => x.Text, x => x.MapFrom(p => p.Text))
-                .ForMember(x => x.Longitude, x => x.MapFrom(p => p.Longitude))
-                .ForMember(x => x.Latitude, x => x.MapFrom(p => p.Latitude))
-                .ForMember(x => x.FileId, x => x.MapFrom(p => p.FileId))
-                .ForMember(x => x.File, x => x.Ignore());
+                .ForMember(x => x.PictureId, x => x.MapFrom(p => p.FileId))
+                .ForMember(x => x.Picture, x => x.Ignore());
         }
     }
 }

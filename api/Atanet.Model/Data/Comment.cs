@@ -3,7 +3,7 @@
     using Atanet.Model.Interfaces;
     using System;
 
-    public class Comment : IIdentifiable, ICreated, ILocatable
+    public class Comment : IIdentifiable, ICreated
     {
         public long Id { get; set; }
 
@@ -13,9 +13,9 @@
 
         public Post Post { get; set; }
 
-        public double Longitude { get; set; }
+        public long UserId { get; set; }
 
-        public double Latitude { get; set; }
+        public User User { get; set; }
 
         public DateTime Created { get; set; }
     }

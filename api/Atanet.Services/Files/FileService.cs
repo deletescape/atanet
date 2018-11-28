@@ -26,21 +26,6 @@
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public long CreateLinkedFile(CreateLinkedFileDto dto)
-        {
-            using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var file = Mapper.Map<File>(dto);
-                this.FillLinkedFile(dto.Link, out string contentType, out string fileName);
-                file.ContentType = contentType;
-                file.FileName = fileName;
-                var fileRepository = unitOfWork.CreateEntityRepository<File>();
-                fileRepository.Create(file);
-                unitOfWork.Save();
-                return file.Id;
-            }
-        }
-
         public long CreateFile(IFormFile formFile)
         {
             if (formFile == null)
@@ -56,8 +41,7 @@
                 var file = new File
                 {
                     ContentType = formFile.ContentType,
-                    FileName = formFile.FileName,
-                    Link = null
+                    FileName = formFile.FileName
                 };
 
                 using (var stream = formFile.OpenReadStream())

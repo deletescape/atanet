@@ -9,8 +9,6 @@
         public CreateCommentDtoMap()
         {
             this.CreateMap<CreateCommentDto, Comment>()
-                .ForMember(x => x.Latitude, x => x.MapFrom(p => p.Latitude))
-                .ForMember(x => x.Longitude, x => x.MapFrom(p => p.Longitude))
                 .ForMember(x => x.Text, x => x.MapFrom(p => p.Text));
         }
     }
