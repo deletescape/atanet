@@ -92,7 +92,7 @@
             services.AddScoped<IPostFilterService, PostFilterService>();
             services.AddScoped<ICommentCreationService, CommentCreationService>();
             services.AddScoped<ICommentFilterService, CommentFilterService>();
-            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IFileCreationService, FileCreationService>();
             services.AddScoped<IQueryService, QueryService>();
             services.AddSingleton<IAssemblyContainer>(x => new AssemblyContainer(this.GetAssemblies()));
             services.AddSingleton<IPagingValidator, PagingValidator>();
