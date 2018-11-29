@@ -15,7 +15,7 @@
     {
         private readonly AtanetDbContext atanetDbContext;
 
-        private readonly Lazy<ChangeTracker> changeTracker;
+        private readonly ChangeTracker changeTracker;
 
         private readonly IBusinessRuleRegistry businessRuleRegistry;
 
@@ -29,7 +29,7 @@
             this.connectionStringBuilder = connectionStringBuilder;
             this.atanetDbContext = this.CreateContext();
             this.businessRuleRegistry = businessRuleRegistry;
-            this.changeTracker = new Lazy<ChangeTracker>(() => new ChangeTracker(this.atanetDbContext));
+            this.changeTracker = this.atanetDbContext.ChangeTracker;
         }
 
         public IRepository<T> CreateEntityRepository<T>()
@@ -48,8 +48,7 @@
 
         public void Save()
         {
-            var changeTrackerValue = this.changeTracker.Value;
-            var businessRules = this.ExecutePreSaveBusinessRules(changeTrackerValue);
+            var businessRules = this.ExecutePreSaveBusinessRules(this.changeTracker);
             this.atanetDbContext.SaveChanges();
             this.ExecutePostSaveBusinessRules(businessRules);
         }

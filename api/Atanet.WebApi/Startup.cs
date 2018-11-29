@@ -34,6 +34,7 @@
     using System.Reflection;
     using System.Data.SqlClient;
     using System.Net.NetworkInformation;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
 
     public class Startup
     {
@@ -100,6 +101,9 @@
             services.AddSingleton<IApiResultService, ApiResultService>();
             services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
             ServiceLocator.SetServiceLocator(() => services.BuildServiceProvider());
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(jwt => jwt.UseGoogle());
 
             var context = services.BuildServiceProvider().GetService<AtanetDbContext>();
             context.Database.EnsureCreated();

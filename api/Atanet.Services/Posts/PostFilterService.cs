@@ -22,18 +22,14 @@
 
         private readonly ICommentFilterService commentFilterService;
 
-        private readonly IFileService fileService;
-
         public PostFilterService(
             IQueryService queryService,
             IPagingValidator pagingValidator,
-            ICommentFilterService commentFilterService,
-            IFileService fileService)
+            ICommentFilterService commentFilterService)
         {
             this.queryService = queryService;
             this.pagingValidator = pagingValidator;
             this.commentFilterService = commentFilterService;
-            this.fileService = fileService;
         }
 
         private IQueryable<T> Page<T>(IQueryable<T> queryable, int page, int pageSize) =>

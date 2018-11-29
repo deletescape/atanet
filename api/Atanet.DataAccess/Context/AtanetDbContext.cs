@@ -1,6 +1,5 @@
 ﻿namespace Atanet.DataAccess.Context
 {
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Atanet.Model.Data;
 

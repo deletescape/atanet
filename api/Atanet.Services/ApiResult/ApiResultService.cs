@@ -1,7 +1,6 @@
 ﻿namespace Atanet.Services.ApiResult
 {
     using FluentValidation.Results;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Atanet.Model.ApiResponse;
     using Atanet.Model.ApiResponse.HTTP200;
@@ -19,26 +18,6 @@
 
     public class ApiResultService : IApiResultService
     {
-        public IApiResult BadRequestResult(IdentityResult identityResult, object attemptedValue, PropertyName propertyName)
-        {
-            if (identityResult.Succeeded)
-            {
-                return this.OkResult();
-            }
-
-            var errors = identityResult.Errors.ToDictionary(
-                x => ErrorCode.Parse(x.Code),
-                x => new ErrorDefinition(attemptedValue, x.Description, propertyName));
-            var result = this.BadRequestResult(errors);
-            return result;
-        }
-
-        public IActionResult BadRequest(IDictionary<ErrorCode, ErrorDefinition> errors) => 
-            this.BadRequestResult(errors).GetResultObject();
-
-        public IActionResult BadRequest(ValidationResult validationResult) =>
-            this.BadRequestResult(validationResult).GetResultObject();
-
         public IActionResult BadRequest(IEnumerable<ValidationResult> validationResult) =>
             this.BadRequestResult(validationResult).GetResultObject();
 
@@ -69,9 +48,6 @@
             return new BadRequestApiResult(validations);
         }
 
-        public IActionResult BadRequest(params (ErrorCode code, ErrorDefinition definition)[] errors) =>
-            this.BadRequestResult(errors).GetResultObject();
-
         public IApiResult BadRequestResult(params (ErrorCode code, ErrorDefinition definition)[] errors) =>
             this.BadRequestResult(errors.ToDictionary(x => x.code, x => x.definition));
 
@@ -80,9 +56,6 @@
 
         public IApiResult CreatedResult(AtanetEntityName entity, long id) =>
             new CreatedApiResult(entity, id);
-
-        public IActionResult Forbidden(AtanetEntityName accessedEntity, long accessedEntityId) =>
-            this.ForbiddenResult(accessedEntity, accessedEntityId).GetResultObject();
 
         public IApiResult ForbiddenResult(AtanetEntityName accessedEntity, long accessedEntityId)
         {
@@ -102,20 +75,14 @@
         public IApiResult InternalServerErrorResult(Exception ex) =>
             new InternalServerErrorApiResult(ex);
 
-        public IActionResult NotFound(AtanetEntityName accessedEntity, long accessedEntityId) =>
-            this.NotFoundResult(accessedEntity, accessedEntityId).GetResultObject();
-
         public IApiResult NotFoundResult(AtanetEntityName accessedEntity, long accessedEntityId) => 
             new NotFoundApiResult(accessedEntity, accessedEntityId);
 
         public IActionResult Ok(object obj) =>
             this.OkResult(obj).GetResultObject();
 
-        public IApiResult OkResult(object obj) => 
+        public IApiResult OkResult(object obj) =>
             new OkApiResult(obj);
-
-        public IActionResult Unauthorized() =>
-            this.UnauthorizedResult().GetResultObject();
 
         public IApiResult UnauthorizedResult() =>
             new UnauthorizedApiResult();
@@ -125,9 +92,6 @@
 
         public IActionResult Ok() =>
             this.OkResult().GetResultObject();
-
-        public IActionResult NoContent() =>
-            this.NoContentResult().GetResultObject();
 
         private IDictionary<ErrorCode, ErrorDefinition> GetErrorDefinitionsFromValidationResult(ValidationResult result)
         {
