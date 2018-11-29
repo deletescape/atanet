@@ -49,11 +49,7 @@
 
             public static readonly PropertyName To = new PropertyName("TO");
 
-            public static readonly PropertyName Latitude = new PropertyName("LAT");
-
-            public static readonly PropertyName Longitude = new PropertyName("LNG");
-
-            public static readonly PropertyName FileId = new PropertyName("FILE_ID");
+            public static readonly PropertyName PictureId = new PropertyName("PICTURE_ID");
         }
 
         public static class Filter

@@ -6,12 +6,5 @@
 
     public interface IPostFilterService
     {
-        IEnumerable<PostDto> FilterByDate(DateTime from, DateTime to, int page, int pageSize, int comments = 0);
-
-        IEnumerable<PostDto> FilterByVotes(int page, int pageSize, int comments = 0);
-
-        IEnumerable<PostDto> FilterByQuery(string query, int page, int pageSize, int comments = 0);
-
-        IEnumerable<PostDto> FilterByLocation(double latitude, double longitude, int page, int pageSize, int comments = 0);
     }
 }

@@ -51,25 +51,6 @@
                 .WithMessage("Text too long");
         }
 
-        public static void AddRuleForLocation<T>(
-            this AbstractAtanetValidator<T> validator) where T : ILocatable
-        {
-            validator.RuleFor(x => x.Latitude)
-                .Must(x => x != default(int) && x >= -90 && x <= 90)
-                .WithErrorCode(ErrorCode.Parse(
-                    ErrorCodeType.OutOfRange,
-                    AtanetEntityName.Post,
-                    PropertyName.Post.Latitude).Code)
-                .WithMessage("Latitude must be a valid value between -90 and 90");
-            validator.RuleFor(x => x.Longitude)
-                .Must(x => x != default(int) && x >= -180 && x <= 180)
-                .WithErrorCode(ErrorCode.Parse(
-                    ErrorCodeType.OutOfRange,
-                    AtanetEntityName.Post,
-                    PropertyName.Post.Longitude).Code)
-                .WithMessage("Longitude must be a valid value between -180 and 180");
-        }
-
         public static void AddRuleForQueryText<T>(
             this AbstractAtanetValidator<T> validator,
             Expression<Func<T, string>> property)
@@ -88,26 +69,6 @@
                     AtanetEntityName.Post,
                     PropertyName.Post.Query).Code)
                 .WithMessage("Please provide a query longer than a characters");
-        }
-
-        public static void AddRuleForVoteStateString<T>(
-            this AbstractAtanetValidator<T> validator,
-            Expression<Func<T, string>> property)
-        {
-            validator.RuleFor(property)
-                .Must(x => (x == "1" || x == "-1") && Enum.TryParse(typeof(VoteState), x, out _))
-                .WithErrorCode(ErrorCode.Parse(
-                    ErrorCodeType.PropertyInvalidData,
-                    AtanetEntityName.Vote,
-                    PropertyName.Vote.VoteState).Code)
-                .WithMessage("Vote state must be set to a valid value");
-            validator.RuleFor(property)
-                .Must(x => x != null && Enum.TryParse(typeof(VoteState), x, out var state) && (VoteState)state != VoteState.Neutral)
-                .WithErrorCode(ErrorCode.Parse(
-                    ErrorCodeType.OutOfRange,
-                    AtanetEntityName.Vote,
-                    PropertyName.Vote.VoteState).Code)
-                .WithMessage("Vote state cannot be neutral");
         }
 
         public static void AddRuleForDate<T>(

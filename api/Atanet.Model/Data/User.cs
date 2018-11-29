@@ -10,7 +10,7 @@ namespace Atanet.Model.Data
         public string Email { get; set; }
 
         public DateTime Created { get; set; }
-        
+
         public File Picture { get; set; }
 
         public long PictureId { get; set; }

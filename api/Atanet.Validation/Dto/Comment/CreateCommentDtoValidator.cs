@@ -8,7 +8,6 @@
         protected override void Initalize()
         {
             this.AddRuleForPostText(x => x.Text, 10, 100);
-            this.AddRuleForLocation();
         }
     }
 }

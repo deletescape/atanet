@@ -20,13 +20,6 @@
             this.fileService = fileService;
         }
 
-        [HttpPost("Linked")]
-        public IActionResult CreateLinkedFile([FromBody] CreateLinkedFileDto dto)
-        {
-            var createdId = this.fileService.CreateLinkedFile(dto);
-            return this.apiResultService.Created(AtanetEntityName.File, createdId);
-        }
-
         [HttpPost]
         [RequestSizeLimit(10_000_000_000)]
         public IActionResult CreateFile(IFormFile file)

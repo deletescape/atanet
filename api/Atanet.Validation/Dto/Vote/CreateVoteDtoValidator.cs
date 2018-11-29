@@ -7,7 +7,6 @@
     {
         protected override void Initalize()
         {
-            this.AddRuleForVoteStateString(x => x.VoteState);
         }
     }
 }

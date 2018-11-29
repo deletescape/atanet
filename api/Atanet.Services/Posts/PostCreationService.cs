@@ -28,16 +28,13 @@
         {
             using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
             {
-                if (createPostDto.FileId.HasValue)
+                var fileRepository = unitOfWork.CreateEntityRepository<File>();
+                var file = fileRepository.Query().FirstOrDefault(x => x.Id == createPostDto.PictureId);
+                if (file == null)
                 {
-                    var fileRepository = unitOfWork.CreateEntityRepository<File>();
-                    var file = fileRepository.Query().FirstOrDefault(x => x.Id == createPostDto.FileId.Value);
-                    if (file == null)
-                    {
-                        throw new ApiException(x => x.BadRequestResult(
-                            (ErrorCode.Parse(ErrorCodeType.InvalidReferenceId, AtanetEntityName.Post, PropertyName.Post.FileId, AtanetEntityName.File),
-                            new ErrorDefinition(createPostDto.FileId, "The file was not found", PropertyName.Post.FileId))));
-                    }
+                    throw new ApiException(x => x.BadRequestResult(
+                        (ErrorCode.Parse(ErrorCodeType.InvalidReferenceId, AtanetEntityName.Post, PropertyName.Post.PictureId, AtanetEntityName.File),
+                        new ErrorDefinition(createPostDto.PictureId, "The file was not found", PropertyName.Post.PictureId))));
                 }
 
                 var repository = unitOfWork.CreateEntityRepository<Post>();

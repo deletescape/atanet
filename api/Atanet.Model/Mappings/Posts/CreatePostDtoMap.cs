@@ -12,7 +12,7 @@
                 .ForMember(x => x.Created, x => x.Ignore())
                 .ForMember(x => x.Id, x => x.Ignore())
                 .ForMember(x => x.Text, x => x.MapFrom(p => p.Text))
-                .ForMember(x => x.PictureId, x => x.MapFrom(p => p.FileId))
+                .ForMember(x => x.PictureId, x => x.MapFrom(p => p.PictureId))
                 .ForMember(x => x.Picture, x => x.Ignore());
         }
     }

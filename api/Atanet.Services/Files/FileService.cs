@@ -81,12 +81,7 @@
                     new ErrorDefinition(postId, "The post was not found", PropertyName.Post.Id))));
             }
 
-            if (!post.FileId.HasValue)
-            {
-                return null;
-            }
-
-            var file = this.queryService.Query<File>().FirstOrDefault(x => x.Id == post.FileId.Value);
+            var file = this.queryService.Query<File>().FirstOrDefault(x => x.Id == post.PictureId);
             return Mapper.Map<FileInfoDto>(file);
         }
 

@@ -24,7 +24,6 @@
     using Atanet.Services.Posts;
     using Atanet.Services.UoW;
     using Atanet.Services.Validation;
-    using Atanet.Services.Votes;
     using Atanet.Validation.Dto.Newsletter;
     using Atanet.WebApi.Infrastructure;
     using Atanet.WebApi.Infrastructure.Filters;
@@ -56,6 +55,7 @@
                 x.MultipartBodyLengthLimit = int.MaxValue;
                 x.MultipartHeadersLengthLimit = int.MaxValue;
             });
+
             services.AddOptions();
             services.Configure<AtanetSettings>(this.Configuration.GetSection("AtanetSettings"));
             services.AddSingleton<IConfiguration>(this.Configuration);
@@ -67,6 +67,7 @@
             {
                 config.Filters.Add(typeof(ValidateActionFilter));
             });
+
             mvc.AddFluentValidation(fv =>
             {
                 fv.ValidatorFactoryType = typeof(ValidationService);
@@ -75,6 +76,7 @@
                     fv.RegisterValidatorsFromAssembly(assembly);
                 }
             });
+
             services.AddTransient<IValidatorFactory, ValidationService>();
             mvc.AddMvcOptions(o => o.Filters.Add(typeof(GlobalExceptionFilter)));
             services.AddSwaggerGen(x => x.OperationFilter<SwaggerFilter>());
@@ -88,15 +90,13 @@
             this.ConfigureBusinessRules(services);
             services.AddScoped<IPostCreationService, PostCreationService>();
             services.AddScoped<IPostFilterService, PostFilterService>();
-            services.AddScoped<IVoteCountService, VoteCountService>();
-            services.AddScoped<IVoteService, VoteService>();
             services.AddScoped<ICommentCreationService, CommentCreationService>();
             services.AddScoped<ICommentFilterService, CommentFilterService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IQueryService, QueryService>();
+            services.AddSingleton<IAssemblyContainer>(x => new AssemblyContainer(this.GetAssemblies()));
             services.AddSingleton<IPagingValidator, PagingValidator>();
             services.AddSingleton<IBusinessRuleRegistry, BaseBusinessRuleRegistry>();
-            services.AddSingleton<IAssemblyContainer>(x => new AssemblyContainer(this.GetAssemblies()));
             services.AddSingleton<IApiResultService, ApiResultService>();
             services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
             ServiceLocator.SetServiceLocator(() => services.BuildServiceProvider());

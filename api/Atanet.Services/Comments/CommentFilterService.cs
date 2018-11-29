@@ -66,8 +66,7 @@
                     PostId = comment.PostId,
                     Created = comment.Created,
                     Id = comment.Id,
-                    Latitude = comment.Latitude,
-                    Longitude = comment.Longitude
+                    UserId = comment.UserId
                 };
             return fetched;
         }
