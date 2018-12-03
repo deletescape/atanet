@@ -1,26 +1,12 @@
-FROM node:8 as builder
+FROM alpine
 
-COPY package.json package-lock.json ./
+RUN apk add --update --no-cache \
+	lighttpd \
+  && rm -rf /var/cache/apk/*
 
-RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
+COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
+COPY /dist/nc-license /var/www/license
 
-RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
+EXPOSE 80
 
-WORKDIR /ng-app
-
-COPY . .
-
-RUN apt-get update
-RUN apt-get install -y gettext-base
-ENV API_URL $API_URL
-RUN envsubst < ./src/app/services/atanet-http.service.ts | tee ./src/app/services/atanet-http.service.ts
-
-RUN $(npm bin)/ng build --prod
-
-FROM nginx:1.13.3-alpine
-
-COPY nginx/default.conf /etc/nginx/conf.d/
-
-RUN rm -rf /usr/share/nginx/html/*
-
-COPY --from=builder /ng-app/dist /usr/share/nginx/html
+ENTRYPOINT ["lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]

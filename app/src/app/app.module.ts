@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -30,6 +30,14 @@ import * as comp from './components';
 import * as serv from './services';
 import * as pipe from './pipes';
 import { CommonModule } from '@angular/common';
+import { ConfigService } from './config';
+
+
+export function init(_boot: ConfigService) {
+  return () => {
+    return _boot.loadConfig();
+  };
+}
 
 @NgModule({
   declarations: [
@@ -77,6 +85,13 @@ import { CommonModule } from '@angular/common';
     MatListModule
   ],
   providers: [
+    ConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: init,
+      deps: [ConfigService],
+      multi: true
+    },
     serv.CreatePostService,
     serv.AtanetHttpService,
     {
