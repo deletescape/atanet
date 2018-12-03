@@ -10,6 +10,8 @@
 
         public long UserId { get; set; }
 
+        public string UserEmail { get; set; }
+
         public string Text { get; set; }
 
         public DateTime Created { get; set; }

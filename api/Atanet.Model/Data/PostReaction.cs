@@ -2,7 +2,7 @@ namespace Atanet.Model.Data
 {
     using Atanet.Model.Interfaces;
 
-    public class PostReaction : IIdentifiable
+    public class PostReaction : IIdentifiable, IUserCreatedEntity
     {
         public long Id { get; set; }
 

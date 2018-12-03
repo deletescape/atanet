@@ -13,7 +13,10 @@
                 .ForMember(x => x.Id, x => x.Ignore())
                 .ForMember(x => x.Text, x => x.MapFrom(p => p.Text))
                 .ForMember(x => x.PictureId, x => x.Ignore())
-                .ForMember(x => x.Picture, x => x.Ignore());
+                .ForMember(x => x.Picture, x => x.Ignore())
+                .ForMember(x => x.UserId, x => x.Ignore())
+                .ForMember(x => x.User, x => x.Ignore())
+                .ForMember(x => x.Sentiment, x => x.Ignore());
         }
     }
 }

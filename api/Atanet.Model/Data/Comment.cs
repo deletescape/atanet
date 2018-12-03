@@ -3,7 +3,7 @@
     using Atanet.Model.Interfaces;
     using System;
 
-    public class Comment : IIdentifiable, ICreated
+    public class Comment : IIdentifiable, ICreated, IUserCreatedEntity
     {
         public long Id { get; set; }
 

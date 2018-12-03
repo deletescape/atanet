@@ -37,6 +37,7 @@
                 var post = createPostDto.MapTo<Post>();
                 var picture = this.fileCreationService.CreateImageFile(unitOfWork, createPostDto.Picture);
                 post.Picture = picture;
+                // post.Sentiment = TODO: sentiment analysis
                 repository.Create(post);
                 unitOfWork.Save();
                 return post.Id;

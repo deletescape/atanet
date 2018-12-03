@@ -3,7 +3,7 @@
     using Atanet.Model.Interfaces;
     using System;
 
-    public class Post : IIdentifiable, ICreated
+    public class Post : IIdentifiable, ICreated, IUserCreatedEntity
     {
         public long Id { get; set; }
 

@@ -11,6 +11,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Atanet.Model.Extensions;
 
     public class CommentFilterService : ICommentFilterService
     {
@@ -36,16 +37,6 @@
             return filtered.ToList();
         }
 
-        public IEnumerable<CommentDto> GetCommentsForPostSince(DateTime date, long postId)
-        {
-            this.ThrowIfPostDoesNotExist(postId);
-            var comments = this.QueryCommentDto();
-            var queried = comments
-                .Where(x => x.PostId == postId && x.Created >= date)
-                .OrderByDescending(x => x.Created);
-            return queried.ToList();
-        }
-
         private void ThrowIfPostDoesNotExist(long postId)
         {
             if (!this.queryService.Query<Post>().Any(x => x.Id == postId))
@@ -59,15 +50,8 @@
         private IQueryable<CommentDto> QueryCommentDto()
         {
             var fetched =
-                from comment in this.queryService.Query<Comment>()
-                select new CommentDto
-                {
-                    Text = comment.Text,
-                    PostId = comment.PostId,
-                    Created = comment.Created,
-                    Id = comment.Id,
-                    UserId = comment.UserId
-                };
+                from comment in this.queryService.Query<Comment>().Include(x => x.User)
+                select comment.MapTo<CommentDto>();
             return fetched;
         }
 
