@@ -35,6 +35,7 @@
     using System.Data.SqlClient;
     using System.Net.NetworkInformation;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Atanet.WebApi.Infrastructure.Authorization;
 
     public class Startup
     {
@@ -102,8 +103,16 @@
             services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
             ServiceLocator.SetServiceLocator(() => services.BuildServiceProvider());
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(jwt => jwt.UseGoogle());
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.SecurityTokenValidators.Clear();
+                o.SecurityTokenValidators.Add(new GoogleTokenValidator());
+            });
 
             var context = services.BuildServiceProvider().GetService<AtanetDbContext>();
             context.Database.EnsureCreated();
@@ -123,6 +132,7 @@
         {
             app.UseMiddleware<OptionsMiddleware>();
             app.UseMiddleware<CorsPolicy>();
+            app.UseAuthentication();
             app.UseMvc();
             app.UseMiddleware<NotFoundMiddleware>();
             if (env.IsDevelopment())
