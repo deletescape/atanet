@@ -5,7 +5,7 @@ RUN apk add --update --no-cache \
   && rm -rf /var/cache/apk/*
 
 COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
-COPY /dist/nc-license /var/www/license
+COPY /dist /var/www/atanet
 
 EXPOSE 80
 
