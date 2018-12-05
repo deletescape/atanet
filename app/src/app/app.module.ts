@@ -31,6 +31,19 @@ import * as serv from './services';
 import * as pipe from './pipes';
 import { CommonModule } from '@angular/common';
 import { ConfigService } from './config';
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angular-6-social-login';
+
+
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig(
+      [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider('183413621231-odlcpmht4o9dnqj2v0rpgcm3a1h2dd0e.apps.googleusercontent.com')
+        }
+      ]);
+  return config;
+}
 
 
 export function init(_boot: ConfigService) {
@@ -82,7 +95,8 @@ export function init(_boot: ConfigService) {
     MatButtonToggleModule,
     MatExpansionModule,
     MatGridListModule,
-    MatListModule
+    MatListModule,
+    SocialLoginModule
   ],
   providers: [
     ConfigService,
@@ -105,7 +119,11 @@ export function init(_boot: ConfigService) {
     serv.LocationService,
     serv.FilterCommentService,
     serv.CreateCommentService,
-    serv.FileService
+    serv.FileService,
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs
+    }
   ],
   entryComponents: [
     comp.CreatePostComponent,

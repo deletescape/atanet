@@ -1,12 +1,8 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatDialog, MatTabGroup, MatToolbar } from '@angular/material';
 import { CreatePostComponent } from '../create-post';
-import { QueryPostsComponent } from '../query-posts';
-import { DatePostsComponent } from '../date-posts';
-import { TaggedPostsComponent } from '../tagged-posts';
-import { PopularPostsComponent } from '../popular-posts';
 import { NewestPostsComponent } from '../newest-posts';
-import { LocationPostsComponent } from '../location-posts';
+import { AuthService, GoogleLoginProvider } from 'angular-6-social-login';
 
 @Component({
   selector: 'app-root',
@@ -14,23 +10,20 @@ import { LocationPostsComponent } from '../location-posts';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  @ViewChild('popular') public popular: PopularPostsComponent;
   @ViewChild('newest') public newest: NewestPostsComponent;
-  @ViewChild('byTag') public byTag: TaggedPostsComponent;
-  @ViewChild('byDate') public byDate: DatePostsComponent;
-  @ViewChild('byQuery') public byQuery: QueryPostsComponent;
-  @ViewChild('byLocation') public byLocation: LocationPostsComponent;
   @ViewChild('tabGroup') public tabGroup: MatTabGroup;
   public isRefreshing = false;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private socialAuthService: AuthService) {
   }
 
   public ngOnInit(): void {
-    this.popular.isActive = true;
-    this.tabGroup.selectedIndexChange.subscribe(async item => {
-      this.setIsActive();
+    this.newest.isActive = true;
+    this.tabGroup.selectedIndexChange.subscribe(async _ => {
       await this.refresh();
+    });
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(userData => {
+      console.log(userData);
     });
   }
 
@@ -45,59 +38,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public setIsActive(): void {
-    this.byTag.isActive = false;
-    this.newest.isActive = false;
-    this.popular.isActive = false;
-    this.byDate.isActive = false;
-    this.byQuery.isActive = false;
-    this.byLocation.isActive = false;
-    switch (this.tabGroup.selectedIndex) {
-      case 0:
-        this.newest.isActive = true;
-        break;
-      case 1:
-        this.popular.isActive = true;
-        break;
-      case 2:
-        this.byLocation.isActive = true;
-        this.byLocation.refreshLocation();
-        break;
-      case 3:
-        this.byTag.isActive = true;
-        break;
-      case 4:
-        this.byDate.isActive = true;
-        break;
-      case 5:
-        this.byQuery.isActive = true;
-        break;
-    }
-  }
-
   public async refresh(): Promise<void> {
-    this.isRefreshing = true;
-    switch (this.tabGroup.selectedIndex) {
-      case 0:
-        await this.newest.refresh();
-        break;
-      case 1:
-        await this.popular.refresh();
-        break;
-      case 2:
-        await this.byLocation.refresh();
-        break;
-      case 3:
-        await this.byTag.refresh();
-        break;
-      case 4:
-        await this.byDate.refresh();
-        break;
-      case 5:
-        await this.byQuery.refresh();
-        break;
-    }
-
-    this.isRefreshing = false;
+    await this.newest.refresh();
   }
 }

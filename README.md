@@ -10,6 +10,22 @@ The technologies used in this project are ASP.NET Core, Flask, TensorFlow and An
 
 Add `.env` file
 
+`
+ASPNETCORE_ENVIRONMENT=Development
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+MYSQL_ROOT_PASSWORD=password
+MYSQL_USER=atanet
+MYSQL_PASSWORD=password
+MYSQL_DATABASE=Atanet
+DATABASE_PORT=3306
+
+HOST_ENVIRONMENT=Development
+`
+
+
+
 `docker-compose up`
 
 Connect to db:
