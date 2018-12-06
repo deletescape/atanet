@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { CreatePost, File } from '../../model';
-import { CreatePostService, SnackbarService, LocationService, FileService } from '../../services';
+import { CreatePostService, SnackbarService, FileService } from '../../services';
 import { CreateFileComponent } from '../create-file';
 import { FileDialogComponent } from '../file-dialog';
 
@@ -12,6 +12,7 @@ import { FileDialogComponent } from '../file-dialog';
 })
 export class CreatePostComponent {
 
+  @ViewChild('fileInput') private fileInput: ElementRef;
   private internalIsLoading = false;
   private internalPostText = '';
   private selectedFile: number | undefined = undefined;
@@ -23,7 +24,6 @@ export class CreatePostComponent {
     private fileService: FileService,
     private createPostService: CreatePostService,
     private snackbarService: SnackbarService,
-    private locationService: LocationService,
     private dialog: MatDialog) {
   }
 
@@ -45,6 +45,14 @@ export class CreatePostComponent {
 
   public get postText(): string {
     return this.internalPostText;
+  }
+
+  public get otherFileName(): string {
+    if (this.fileInput.nativeElement.files && this.fileInput.nativeElement.files[0]) {
+      return this.fileInput.nativeElement.files[0].name;
+    } else {
+      return 'No file selected';
+    }
   }
 
   public onFilePreview(): void {
@@ -74,21 +82,31 @@ export class CreatePostComponent {
     this.selectedFile = undefined;
   }
 
-  public addFile(): void {
-    const dialogRef = this.dialog.open(CreateFileComponent, {
-      width: '60%'
-    });
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result > 0) {
-        this.selectedFile = <number>result;
+  public selectFile(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  public async createFile(): Promise<void> {
+    if (this.fileInput.nativeElement.files && this.fileInput.nativeElement.files[0]) {
+      const result = await this.fileService.addFile(this.fileInput.nativeElement.files[0]);
+      if (result !== undefined) {
+        this.selectedFile = result.createdId;
+        this.onFilePreview();
+      } else {
+        const message = 'Something went wrong. The file may be too large';
+        this.snackbarService.showMessage(message);
+        throw new Error(message);
       }
-    });
+    } else {
+      throw new Error('No file selected');
+    }
   }
 
   public async createPost(): Promise<void> {
     try {
       this.isLoading = true;
       const createPost = await this.createCreatePostModel();
+      await this.createFile();
       if (this.selectedFile) {
         createPost.fileId = this.selectedFile;
       }
@@ -102,7 +120,6 @@ export class CreatePostComponent {
   }
 
   public async createCreatePostModel(): Promise<CreatePost> {
-    const location = await this.locationService.getLocation();
-    return new CreatePost(this.postText, <number>location['latitude'], <number>location['longitude']);
+    return new CreatePost(this.postText);
   }
 }

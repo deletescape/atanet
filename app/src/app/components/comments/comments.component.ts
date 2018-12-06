@@ -5,7 +5,7 @@ import { Post } from '../../model/post.model';
 
 import { Comment } from '../../model/comment.model';
 import { MatExpansionPanel } from '@angular/material';
-import { FilterCommentService, CreateCommentService, LocationService, SnackbarService } from '../../services';
+import { FilterCommentService, CreateCommentService, SnackbarService } from '../../services';
 
 @Component({
   selector: 'app-comments',
@@ -36,7 +36,6 @@ export class CommentsComponent implements OnInit {
   constructor(
     private filterCommentService: FilterCommentService,
     private createCommentService: CreateCommentService,
-    private locationService: LocationService,
     private snackbarService: SnackbarService) {
     this._previewTimer = observableInterval(1500);
     this._commentTimer = observableInterval(2000);
@@ -110,9 +109,8 @@ export class CommentsComponent implements OnInit {
 
   public async comment(): Promise<void> {
     this._isLoading = true;
-    const location = await this.locationService.getLocation();
     const text = this.commentText;
-    this.createCommentService.createComment(this._post.id, text, location.latitude, location.longitude).then(createdId => {
+    this.createCommentService.createComment(this._post.id, text).then(createdId => {
       this._isLoading = false;
       this.commentText = '';
       this.snackbarService.showMessage('Commented!');

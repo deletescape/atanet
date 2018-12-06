@@ -7,12 +7,10 @@ export class CreateCommentService {
 
   constructor(private httpService: AtanetHttpService) { }
 
-  public async createComment(postId: number, text: string, latitude: number, longitude: number): Promise<number> {
+  public async createComment(postId: number, text: string): Promise<number> {
     const url = `Posts/${postId}/Comments`;
     const result = await this.httpService.post(url, {
-      text: text,
-      latitude: latitude,
-      longitude: longitude
+      text: text
     }, CreatedResult);
     return result.createdId;
   }

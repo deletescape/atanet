@@ -4,7 +4,6 @@ export * from './snackbar.service';
 export * from './vote.service';
 export * from './filter-post.service';
 export * from './tag.service';
-export * from './location.service';
 export * from './filter-comment.service';
 export * from './create-comment.service';
 export * from './file.service';

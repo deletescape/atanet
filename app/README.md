@@ -1,7 +1,6 @@
 # Atanet
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.1.
-Coming features: Search for Posts, Location, Pictures
 
 ## Development server
 
