@@ -5,6 +5,7 @@
     using Atanet.Model.Validation;
     using Atanet.Services.ApiResult;
     using Atanet.Services.Comments;
+    using Microsoft.AspNetCore.Authorization;
 
     [Route("api/Posts")]
     public class CreateCommentsController : Controller
@@ -20,6 +21,7 @@
         }
 
         [HttpPost("{postId}/Comments")]
+        [Authorize]
         public IActionResult CreateComment([FromRoute] long postId, [FromBody] CreateCommentDto createCommentDto)
         {
             var id = this.commentCreationService.CreateComment(postId, createCommentDto);

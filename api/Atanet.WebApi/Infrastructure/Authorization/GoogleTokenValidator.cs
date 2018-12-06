@@ -29,23 +29,25 @@ namespace Atanet.WebApi.Infrastructure.Authorization
         public ClaimsPrincipal ValidateToken(string securityToken, TokenValidationParameters validationParameters, out SecurityToken validatedToken)
         {
             validatedToken = null;
-            var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings()).Result;
+            var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings
+            {
+                Audience = new[] { "183413621231-odlcpmht4o9dnqj2v0rpgcm3a1h2dd0e.apps.googleusercontent.com" }
+            }).Result;
 
             var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, payload.Name),
-                    new Claim(ClaimTypes.Name, payload.Name),
-                    new Claim(JwtRegisteredClaimNames.FamilyName, payload.FamilyName),
-                    new Claim(JwtRegisteredClaimNames.GivenName, payload.GivenName),
-                    new Claim(JwtRegisteredClaimNames.Email, payload.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, payload.Subject),
-                    new Claim(JwtRegisteredClaimNames.Iss, payload.Issuer),
-                };
+            {
+                new Claim(ClaimTypes.NameIdentifier, payload.Name),
+                new Claim(ClaimTypes.Name, payload.Name),
+                new Claim(JwtRegisteredClaimNames.FamilyName, payload.FamilyName),
+                new Claim(JwtRegisteredClaimNames.GivenName, payload.GivenName),
+                new Claim(JwtRegisteredClaimNames.Email, payload.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, payload.Subject),
+                new Claim(JwtRegisteredClaimNames.Iss, payload.Issuer),
+            };
 
             try
             {
-                var principle = new ClaimsPrincipal();
-                principle.AddIdentity(new ClaimsIdentity(claims));
+                var principle = new ClaimsPrincipal(new ClaimsIdentity(claims, "Bearer"));
                 return principle;
             }
             catch (Exception e)

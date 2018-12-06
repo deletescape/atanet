@@ -65,6 +65,7 @@
             var settings = services.BuildServiceProvider().GetService<AtanetSettings>();
             this.ConfigureAutomapper();
             services.AddCors();
+
             var mvc = services.AddMvc(config =>
             {
                 config.Filters.Add(typeof(ValidateActionFilter));
@@ -77,6 +78,17 @@
                 {
                     fv.RegisterValidatorsFromAssembly(assembly);
                 }
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.SecurityTokenValidators.Clear();
+                o.SecurityTokenValidators.Add(new GoogleTokenValidator());
             });
 
             services.AddTransient<IValidatorFactory, ValidationService>();
@@ -103,17 +115,6 @@
             services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
             ServiceLocator.SetServiceLocator(() => services.BuildServiceProvider());
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                o.SecurityTokenValidators.Clear();
-                o.SecurityTokenValidators.Add(new GoogleTokenValidator());
-            });
-
             var context = services.BuildServiceProvider().GetService<AtanetDbContext>();
             context.Database.EnsureCreated();
 
@@ -132,8 +133,7 @@
         {
             app.UseMiddleware<OptionsMiddleware>();
             app.UseMiddleware<CorsPolicy>();
-            app.UseAuthentication();
-            app.UseMvc();
+            app.UseAuthentication().UseMvc();
             app.UseMiddleware<NotFoundMiddleware>();
             if (env.IsDevelopment())
             {

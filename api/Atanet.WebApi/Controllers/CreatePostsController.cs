@@ -5,6 +5,7 @@
     using Atanet.Model.Validation;
     using Atanet.Services.ApiResult;
     using Atanet.Services.Posts;
+    using Microsoft.AspNetCore.Authorization;
 
     [Route("api/posts")]
     public class CreatePostsController : Controller
@@ -20,6 +21,7 @@
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreatePost([FromForm] CreatePostDto createPostDto)
         {
             var id = this.postCreationService.CreatePost(createPostDto);
