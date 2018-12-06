@@ -29,9 +29,10 @@ namespace Atanet.WebApi.Infrastructure.Authorization
         public ClaimsPrincipal ValidateToken(string securityToken, TokenValidationParameters validationParameters, out SecurityToken validatedToken)
         {
             validatedToken = null;
+            var clientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
             var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings
             {
-                Audience = new[] { "183413621231-odlcpmht4o9dnqj2v0rpgcm3a1h2dd0e.apps.googleusercontent.com" }
+                Audience = new[] { clientId }
             }).Result;
 
             var claims = new List<Claim>
