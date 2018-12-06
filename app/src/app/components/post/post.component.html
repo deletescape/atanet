@@ -3,7 +3,6 @@
     <div class="full--width">
       <mat-card-title class="full--width">
         <div class="title--container full--width">
-          <div class="left">{{post.topic | postTagName}}</div>
           <div *ngIf="post.voteCount > 0">
             <div class="right green">{{post.voteCount | prefixNumber}}</div>
           </div>
