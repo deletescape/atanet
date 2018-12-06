@@ -1,22 +1,9 @@
 <div>
     <mat-toolbar color="primary">
         <div class="icon">
-            <img src="/atanet/assets/img/atanet.png" alt="atanet" height="42" width="42">
+            <!-- <img src="/atanet/assets/img/atanet.png" alt="atanet" height="42" width="42"> -->
         </div>
         <span>Atanet</span>
     </mat-toolbar>
-    <div class="atanet--create">
-        <button mat-button (click)="showDialog()">
-            <mat-icon>add</mat-icon>
-        </button>
-        <button mat-button [disabled]="isRefreshing" (click)="refresh()">
-            <mat-icon>refresh</mat-icon>
-        </button>
-    </div>
-    <mat-tab-group #tabGroup class="tab--group">
-        <mat-tab label="Newest">
-            <app-newest-posts #newest>
-            </app-newest-posts>
-        </mat-tab>
-    </mat-tab-group>
+    <router-outlet></router-outlet>
 </div>
