@@ -1,0 +1,4 @@
+{
+    "baseUrl": "http://localhost:9000/api/",
+    "clientId": "$GOOGLE_CLIENT_ID"
+}

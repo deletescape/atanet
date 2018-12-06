@@ -1,5 +1,6 @@
 export class AppConfig {
     public baseUrl: string | undefined = undefined;
+    public clientId: string | undefined = undefined;
 }
 
 export class ConfigService {

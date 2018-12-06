@@ -35,12 +35,12 @@ import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angul
 import { routing } from './app-routing.module';
 
 
-export function getAuthServiceConfigs() {
+export function getAuthServiceConfigs(configService: ConfigService) {
   let config = new AuthServiceConfig(
     [
       {
         id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider('183413621231-odlcpmht4o9dnqj2v0rpgcm3a1h2dd0e.apps.googleusercontent.com')
+        provider: new GoogleLoginProvider(configService.config.clientId)
       }
     ]);
   return config;
@@ -119,6 +119,7 @@ export function init(_boot: ConfigService) {
     serv.FileService,
     {
       provide: AuthServiceConfig,
+      deps: [ConfigService],
       useFactory: getAuthServiceConfigs
     }
   ],
