@@ -32,16 +32,17 @@ import * as pipe from './pipes';
 import { CommonModule } from '@angular/common';
 import { ConfigService } from './config';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angular-6-social-login';
+import { routing } from './app-routing.module';
 
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
-      [
-        {
-          id: GoogleLoginProvider.PROVIDER_ID,
-          provider: new GoogleLoginProvider('183413621231-odlcpmht4o9dnqj2v0rpgcm3a1h2dd0e.apps.googleusercontent.com')
-        }
-      ]);
+    [
+      {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider('183413621231-odlcpmht4o9dnqj2v0rpgcm3a1h2dd0e.apps.googleusercontent.com')
+      }
+    ]);
   return config;
 }
 
@@ -63,7 +64,9 @@ export function init(_boot: ConfigService) {
     comp.CommentsComponent,
     comp.PostFileComponent,
     comp.FileDialogComponent,
-    comp.CreateFileComponent
+    comp.CreateFileComponent,
+    comp.LoginComponent,
+    comp.AtanetComponent
   ],
   imports: [
     CommonModule,
@@ -90,7 +93,8 @@ export function init(_boot: ConfigService) {
     MatExpansionModule,
     MatGridListModule,
     MatListModule,
-    SocialLoginModule
+    SocialLoginModule,
+    routing
   ],
   providers: [
     ConfigService,

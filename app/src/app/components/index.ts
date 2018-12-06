@@ -7,3 +7,5 @@ export * from './comments';
 export * from './post-file';
 export * from './file-dialog';
 export * from './create-file';
+export * from './login';
+export * from './atanet';
