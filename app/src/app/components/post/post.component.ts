@@ -3,7 +3,6 @@ import { Post } from '../../model';
 import {
   VoteService,
   SnackbarService,
-  LocationService,
   FilterCommentService,
   CreateCommentService,
   AtanetHttpService

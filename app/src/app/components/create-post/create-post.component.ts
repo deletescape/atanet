@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { CreatePost, File } from '../../model';
-import { CreatePostService, SnackbarService, LocationService, FileService } from '../../services';
+import { CreatePostService, SnackbarService, FileService } from '../../services';
 import { CreateFileComponent } from '../create-file';
 import { FileDialogComponent } from '../file-dialog';
 
@@ -24,7 +24,6 @@ export class CreatePostComponent {
     private fileService: FileService,
     private createPostService: CreatePostService,
     private snackbarService: SnackbarService,
-    private locationService: LocationService,
     private dialog: MatDialog) {
   }
 
@@ -121,7 +120,6 @@ export class CreatePostComponent {
   }
 
   public async createCreatePostModel(): Promise<CreatePost> {
-    const location = await this.locationService.getLocation();
-    return new CreatePost(this.postText, <number>location['latitude'], <number>location['longitude']);
+    return new CreatePost(this.postText);
   }
 }

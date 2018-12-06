@@ -40,10 +40,4 @@ export class FilterPostService {
     const result = await this.httpService.getArray(url, Post);
     return result;
   }
-
-  public async byLocation(page: number, pageSize: number, latitude: number, longitude: number, commentAmount: number): Promise<Post[]> {
-    const url = `Posts/Location?page=${page}&pageSize=${pageSize}&lng=${longitude}&lat=${latitude}&comments=${commentAmount}`;
-    const result = await this.httpService.getArray(url, Post);
-    return result;
-  }
 }

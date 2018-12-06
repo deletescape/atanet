@@ -114,7 +114,6 @@ export function init(_boot: ConfigService) {
     serv.VoteService,
     serv.FilterPostService,
     serv.TagService,
-    serv.LocationService,
     serv.FilterCommentService,
     serv.CreateCommentService,
     serv.FileService,

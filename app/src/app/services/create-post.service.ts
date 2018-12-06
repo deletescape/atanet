@@ -12,9 +12,7 @@ export class CreatePostService {
   public async createPost(createPost: CreatePost): Promise<number> {
     const uri = 'Posts';
     const body = {
-      text: createPost.text,
-      longitude: createPost.longitude,
-      latitude: createPost.latitude
+      text: createPost.text
     };
     if (createPost.fileId) {
       body['fileId'] = createPost.fileId;
