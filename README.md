@@ -12,15 +12,15 @@ Add `.env` file
 
 `
 ASPNETCORE_ENVIRONMENT=Development
-GOOGLE_CLIENT_ID=change_me
+GOOGLE_CLIENT_ID=client_id
 
 MYSQL_ROOT_PASSWORD=password
 MYSQL_USER=atanet
 MYSQL_PASSWORD=password
 MYSQL_DATABASE=Atanet
 DATABASE_PORT=3306
-
-HOST_ENVIRONMENT=Development
+# either db or ip
+DATABASE_HOST=db
 `
 
 
