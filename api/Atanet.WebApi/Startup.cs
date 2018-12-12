@@ -36,6 +36,12 @@
     using System.Net.NetworkInformation;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Atanet.WebApi.Infrastructure.Authorization;
+    using Atanet.Services.Authentication;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Microsoft.AspNetCore.Http;
+    using Atanet.Services.Scoring;
+    using Atanet.Model.Mappings.User;
+    using Atanet.Services.Posts.Reactions;
 
     public class Startup
     {
@@ -59,13 +65,18 @@
             });
 
             services.AddOptions();
-            services.Configure<AtanetSettings>(this.Configuration.GetSection("AtanetSettings"));
+                        services.Configure<AtanetSettings>(this.Configuration.GetSection("AtanetSettings"));
             services.AddSingleton<IConfiguration>(this.Configuration);
             services.AddSingleton<AtanetSettings>(x => x.GetService<IOptions<AtanetSettings>>().Value);
-            var settings = services.BuildServiceProvider().GetService<AtanetSettings>();
-            this.ConfigureAutomapper();
-            services.AddCors();
+            services.AddSingleton<IApiResultService, ApiResultService>();
 
+            services.AddCors(x => x.AddDefaultPolicy(builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowCredentials()));
+
+            services.AddAutoMapper(x => x.AddProfiles(this.GetAssemblies().ToList()));
             var mvc = services.AddMvc(config =>
             {
                 config.Filters.Add(typeof(ValidateActionFilter));
@@ -80,6 +91,7 @@
                 }
             });
 
+            var apiResultServiceInstance = services.BuildServiceProvider().GetService<IApiResultService>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,7 +100,7 @@
             }).AddJwtBearer(o =>
             {
                 o.SecurityTokenValidators.Clear();
-                o.SecurityTokenValidators.Add(new GoogleTokenValidator());
+                o.SecurityTokenValidators.Add(new GoogleTokenValidator(apiResultServiceInstance));
             });
 
             services.AddTransient<IValidatorFactory, ValidationService>();
@@ -107,11 +119,15 @@
             services.AddScoped<ICommentCreationService, CommentCreationService>();
             services.AddScoped<ICommentFilterService, CommentFilterService>();
             services.AddScoped<IFileCreationService, FileCreationService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPictureService, PictureService>();
             services.AddScoped<IQueryService, QueryService>();
+            services.AddScoped<IScoreService, ScoreService>();
+            services.AddScoped<IPostReactionCreationService, PostReactionCreationService>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IAssemblyContainer>(x => new AssemblyContainer(this.GetAssemblies()));
             services.AddSingleton<IPagingValidator, PagingValidator>();
             services.AddSingleton<IBusinessRuleRegistry, BaseBusinessRuleRegistry>();
-            services.AddSingleton<IApiResultService, ApiResultService>();
             services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
             ServiceLocator.SetServiceLocator(() => services.BuildServiceProvider());
 
@@ -131,8 +147,7 @@
 
         private void ConfigureCore(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
-            app.UseMiddleware<OptionsMiddleware>();
-            app.UseMiddleware<CorsPolicy>();
+            app.UseCors();
             app.UseAuthentication().UseMvc();
             app.UseMiddleware<NotFoundMiddleware>();
             if (env.IsDevelopment())
@@ -157,10 +172,7 @@
                     }
                 }
             }
-        }
-
-        private void ConfigureAutomapper() =>
-            Mapper.Initialize(cfg => cfg.AddProfiles(this.GetAssemblies().ToList()));
+        }            
 
         private IEnumerable<Assembly> GetAssemblies() =>
             AssemblyUtilities.GetAtanetAssemblies();

@@ -1,18 +1,14 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Post } from '../../model';
 import {
-  VoteService,
   SnackbarService,
-  FilterCommentService,
-  CreateCommentService,
   AtanetHttpService
 } from '../../services';
-import { GlobalErrorHandler } from '../../global-error-handler';
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.css']
+  styleUrls: ['./post.component.scss']
 })
 export class PostComponent {
   private _internalPost: Post;
@@ -22,7 +18,6 @@ export class PostComponent {
 
   constructor(
     private httpService: AtanetHttpService,
-    private voteService: VoteService,
     private snackbarService: SnackbarService) {
   }
 
@@ -36,42 +31,7 @@ export class PostComponent {
     this._index = value;
   }
 
-  public get isAudio(): boolean {
-    if (this._internalPost && this._internalPost.file && this._internalPost.file.contentType) {
-      return this._internalPost.file.contentType.startsWith('audio');
-    }
-    return false;
-  }
-
-  public get fileUrl(): string {
-    if (this._internalPost && this._internalPost.file) {
-      return this._internalPost.file.url;
-    }
-    return '';
-  }
-
   public get post(): Post {
     return this._internalPost;
-  }
-
-  public get voted(): boolean {
-    return this.voteService.hasVoted(this.post.id);
-  }
-
-  public async downvote(): Promise<void> {
-    await this.vote((service, id) => service.downvote(id), 'Downvoted post!', -1);
-  }
-
-  public async upvote(): Promise<void> {
-    await this.vote((service, id) => service.upvote(id), 'Upvoted post!', 1);
-  }
-
-  private async vote(voteAction: (service: VoteService, id: number) => Promise<number>, text: string, addValue: number): Promise<void> {
-    if (!this._hasVoted) {
-      this._hasVoted = true;
-      this.post.voteCount += addValue;
-      await voteAction(this.voteService, this.post.id);
-      this.snackbarService.showMessage(text);
-    }
   }
 }

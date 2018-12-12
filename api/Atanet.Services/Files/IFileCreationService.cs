@@ -8,5 +8,7 @@
     public interface IFileCreationService
     {
         File CreateImageFile(IUnitOfWork unitOfWork, IFormFile formFile);
+
+        File CreateImageFile(IUnitOfWork unitOfWork, byte[] data, string fileName);
     }
 }

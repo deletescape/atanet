@@ -1,34 +1,23 @@
-import { Component, OnInit, Inject, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { CreatePost, File } from '../../model';
-import { CreatePostService, SnackbarService, FileService } from '../../services';
-import { CreateFileComponent } from '../create-file';
-import { FileDialogComponent } from '../file-dialog';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
+import { CreatePost } from '../../model';
+import { CreatePostService, SnackbarService } from '../../services';
 
 @Component({
   selector: 'app-create-post',
   templateUrl: './create-post.component.html',
-  styleUrls: ['./create-post.component.css']
+  styleUrls: ['./create-post.component.scss']
 })
-export class CreatePostComponent {
+export class CreatePostComponent implements OnInit {
 
   @ViewChild('fileInput') private fileInput: ElementRef;
   private internalIsLoading = false;
   private internalPostText = '';
-  private selectedFile: number | undefined = undefined;
-
-  @Output() private postCreated = new EventEmitter<number>();
 
   constructor(
     public dialogRef: MatDialogRef<CreatePostComponent>,
-    private fileService: FileService,
     private createPostService: CreatePostService,
-    private snackbarService: SnackbarService,
-    private dialog: MatDialog) {
-  }
-
-  public get fileId(): number {
-    return this.selectedFile;
+    private snackbarService: SnackbarService) {
   }
 
   public get isLoading(): boolean {
@@ -48,26 +37,11 @@ export class CreatePostComponent {
   }
 
   public get otherFileName(): string {
-    if (this.fileInput.nativeElement.files && this.fileInput.nativeElement.files[0]) {
-      return this.fileInput.nativeElement.files[0].name;
-    } else {
-      return 'No file selected';
-    }
+    const file = this.getFile();
+    return file ? file.name : 'No file selected';
   }
 
-  public onFilePreview(): void {
-    if (this.selectedFile) {
-      this.isLoading = true;
-      this.fileService.getFile(this.selectedFile).then(x => {
-        this.isLoading = false;
-        this.dialog.open(FileDialogComponent, {
-          width: '70%',
-          data: {
-            file: <File>x
-          }
-        });
-      });
-    }
+  public ngOnInit(): void {
   }
 
   public onNoClick(): void {
@@ -78,48 +52,37 @@ export class CreatePostComponent {
     this.dialogRef.close(-1);
   }
 
-  public removeFile(): void {
-    this.selectedFile = undefined;
-  }
-
   public selectFile(): void {
     this.fileInput.nativeElement.click();
   }
 
-  public async createFile(): Promise<void> {
-    if (this.fileInput.nativeElement.files && this.fileInput.nativeElement.files[0]) {
-      const result = await this.fileService.addFile(this.fileInput.nativeElement.files[0]);
-      if (result !== undefined) {
-        this.selectedFile = result.createdId;
-        this.onFilePreview();
-      } else {
-        const message = 'Something went wrong. The file may be too large';
-        this.snackbarService.showMessage(message);
-        throw new Error(message);
-      }
-    } else {
-      throw new Error('No file selected');
-    }
-  }
-
   public async createPost(): Promise<void> {
+    if (!this.getFile()) {
+      this.snackbarService.showMessage('No file selected');
+      return;
+    }
+
     try {
       this.isLoading = true;
-      const createPost = await this.createCreatePostModel();
-      await this.createFile();
-      if (this.selectedFile) {
-        createPost.fileId = this.selectedFile;
-      }
+      const createPost = await this.createCreatePostModel(this.getFile());
       const result = await this.createPostService.createPost(createPost);
-      this.dialogRef.close(result);
-      this.snackbarService.showMessage('Post created');
-      this.postCreated.emit(result);
+      if (result.success) {
+        this.dialogRef.close(result);
+      }
     } finally {
       this.isLoading = false;
     }
   }
 
-  public async createCreatePostModel(): Promise<CreatePost> {
-    return new CreatePost(this.postText);
+  public createCreatePostModel(file: any): CreatePost {
+    return new CreatePost(this.postText, file);
+  }
+
+  private getFile(): any {
+    if (this.fileInput.nativeElement.files && this.fileInput.nativeElement.files[0]) {
+      return this.fileInput.nativeElement.files[0];
+    }
+
+    return null;
   }
 }

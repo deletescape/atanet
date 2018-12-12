@@ -7,7 +7,7 @@
     using Atanet.Services.Comments;
     using Microsoft.AspNetCore.Authorization;
 
-    [Route("api/Posts")]
+    [Route("api/posts")]
     public class CreateCommentsController : Controller
     {
         private readonly ICommentCreationService commentCreationService;
@@ -20,7 +20,7 @@
             this.apiResultService = apiResultService;
         }
 
-        [HttpPost("{postId}/Comments")]
+        [HttpPost("{postId}/comments")]
         [Authorize]
         public IActionResult CreateComment([FromRoute] long postId, [FromBody] CreateCommentDto createCommentDto)
         {

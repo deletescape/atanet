@@ -6,13 +6,19 @@
     using Atanet.Services.UoW;
     using System.Collections.Generic;
     using System.Linq;
+    using Atanet.Services.ApiResult;
 
     public class ValidationBusinessRule : IBusinessRuleBase
     {
         private readonly IValidatorFactory validatorFactory;
 
-        public ValidationBusinessRule(IValidatorFactory validatorFactory) =>
+        private readonly IApiResultService apiResultService;
+
+        public ValidationBusinessRule(IValidatorFactory validatorFactory, IApiResultService apiResultService)
+        {
             this.validatorFactory = validatorFactory;
+            this.apiResultService = apiResultService;
+        }
 
         public void PostSave(IUnitOfWork unitOfWork)
         {
@@ -37,7 +43,7 @@
             var validationResult = validator.Validate(obj);
             if (!validationResult.IsValid)
             {
-                throw new ApiException(x => x.BadRequestResult(validationResult));
+                throw new ApiException(this.apiResultService.BadRequestResult(validationResult));
             }
         }
     }

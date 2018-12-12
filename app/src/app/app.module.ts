@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler, APP_INITIALIZER } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { GlobalErrorHandler } from './global-error-handler';
@@ -23,7 +23,8 @@ import {
   MatButtonToggleModule,
   MatExpansionModule,
   MatGridListModule,
-  MatListModule
+  MatListModule,
+  MatMenuModule
 } from '@angular/material';
 
 import * as comp from './components';
@@ -33,6 +34,8 @@ import { CommonModule } from '@angular/common';
 import { ConfigService } from './config';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angular-6-social-login';
 import { routing } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { TokenInterceptor } from './token.interceptor';
 
 
 export function getAuthServiceConfigs(configService: ConfigService) {
@@ -55,16 +58,15 @@ export function init(_boot: ConfigService) {
 
 @NgModule({
   declarations: [
-    comp.AppComponent,
+    AppComponent,
     comp.CreatePostComponent,
-    comp.NewestPostsComponent,
+    comp.AllPostsComponent,
     comp.PostContainerComponent,
     comp.PostComponent,
     pipe.PrefixNumberPipe,
+    pipe.SecurePipe,
     comp.CommentsComponent,
-    comp.PostFileComponent,
     comp.FileDialogComponent,
-    comp.CreateFileComponent,
     comp.LoginComponent,
     comp.AtanetComponent
   ],
@@ -93,6 +95,7 @@ export function init(_boot: ConfigService) {
     MatExpansionModule,
     MatGridListModule,
     MatListModule,
+    MatMenuModule,
     SocialLoginModule,
     routing
   ],
@@ -105,29 +108,29 @@ export function init(_boot: ConfigService) {
       multi: true
     },
     serv.CreatePostService,
+    serv.FilterPostService,
     serv.AtanetHttpService,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
     },
     serv.SnackbarService,
-    serv.VoteService,
-    serv.FilterPostService,
-    serv.TagService,
-    serv.FilterCommentService,
-    serv.CreateCommentService,
-    serv.FileService,
+    serv.UserHttpService,
     {
       provide: AuthServiceConfig,
       deps: [ConfigService],
       useFactory: getAuthServiceConfigs
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
     }
   ],
   entryComponents: [
     comp.CreatePostComponent,
-    comp.FileDialogComponent,
-    comp.CreateFileComponent
+    comp.FileDialogComponent
   ],
-  bootstrap: [comp.AppComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,5 @@
-import { ErrorHandler, Injectable, Injector} from '@angular/core';
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material';
-import { AppComponent } from './components/index';
 import { BadRequest } from './model';
 import { SnackbarService } from './services/snackbar.service';
 
@@ -22,7 +20,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       } catch (ex) {
       }
     } else {
-      console.dir(error);
+      console.error(error);
       this.snackBarService.showMessage('Catastrophic failure!!!');
     }
   }

@@ -5,12 +5,12 @@ import { Post } from '../../model/post.model';
 
 import { Comment } from '../../model/comment.model';
 import { MatExpansionPanel } from '@angular/material';
-import { FilterCommentService, CreateCommentService, SnackbarService } from '../../services';
+import { SnackbarService } from '../../services';
 
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
-  styleUrls: ['./comments.component.css'],
+  styleUrls: ['./comments.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class CommentsComponent implements OnInit {
@@ -34,8 +34,6 @@ export class CommentsComponent implements OnInit {
   @ViewChild('expansionPanel') public expansionPanel: MatExpansionPanel;
 
   constructor(
-    private filterCommentService: FilterCommentService,
-    private createCommentService: CreateCommentService,
     private snackbarService: SnackbarService) {
     this._previewTimer = observableInterval(1500);
     this._commentTimer = observableInterval(2000);
@@ -50,7 +48,6 @@ export class CommentsComponent implements OnInit {
   public ngOnInit(): void {
     this.startPreviewTimer();
     this.expansionPanel.opened.subscribe(x => {
-      this.startCommentTimer();
       this.opened();
     });
     this.expansionPanel.closed.subscribe(x => {
@@ -108,15 +105,6 @@ export class CommentsComponent implements OnInit {
   }
 
   public async comment(): Promise<void> {
-    this._isLoading = true;
-    const text = this.commentText;
-    this.createCommentService.createComment(this._post.id, text).then(createdId => {
-      this._isLoading = false;
-      this.commentText = '';
-      this.snackbarService.showMessage('Commented!');
-    }).catch(x => {
-      this._isLoading = false;
-    });
   }
 
   public async loadMore(): Promise<void> {
@@ -126,12 +114,6 @@ export class CommentsComponent implements OnInit {
   }
 
   public async loadComments(): Promise<void> {
-    this._isLoading = true;
-    const results = await this.filterCommentService.getComments(this._post.id, this._page++, this._pageSize);
-    this._lastLoadedComments = new Date();
-    this._comments.push(...results);
-    this._post.comments.push(...results);
-    this._isLoading = false;
   }
 
   private startPreviewTimer(): void {
@@ -144,20 +126,6 @@ export class CommentsComponent implements OnInit {
         this._currentCommentPreview = this._comments[this._currentCommentIndex++];
       } else {
         this._currentCommentPreview = this._post.comments[this._currentCommentIndex++];
-      }
-    });
-  }
-
-  private startCommentTimer(): void {
-    this._commentTimerSubscription = this._commentTimer.subscribe(() => {
-      if (this._hasLoadedComments && this._lastLoadedComments < new Date() && this._isOpen) {
-        this.filterCommentService.getCommentsSince(this._lastLoadedComments, this._post.id).then(x => {
-          for (const item of x) {
-            if (this._comments.filter(j => j.id === item.id).length <= 0) {
-              this._comments.unshift(item);
-            }
-          }
-        });
       }
     });
   }

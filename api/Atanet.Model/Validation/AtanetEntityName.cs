@@ -6,6 +6,8 @@
         Filter,
         Unspecified,
         Comment,
-        File
+        File,
+        User,
+        Reaction
     }
 }

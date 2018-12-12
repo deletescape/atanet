@@ -1,12 +1,11 @@
-import { Component, OnInit, Input, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Post, PostContainerRequest } from '../../model';
-import { VoteService, FilterPostService } from '../../services';
 import * as moment from 'moment';
 
 @Component({
   selector: 'app-post-container',
   templateUrl: './post-container.component.html',
-  styleUrls: ['./post-container.component.css']
+  styleUrls: ['./post-container.component.scss']
 })
 export class PostContainerComponent implements OnInit {
   private page = 0;

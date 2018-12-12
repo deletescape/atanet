@@ -51,6 +51,13 @@
         public IApiResult BadRequestResult(params (ErrorCode code, ErrorDefinition definition)[] errors) =>
             this.BadRequestResult(errors.ToDictionary(x => x.code, x => x.definition));
 
+        public IApiResult BadRequestResult(string message)
+        {
+            var errorCode = ErrorCode.Parse("BUSINESS_RULE_ERROR");
+            var definition = new ErrorDefinition(null, message, PropertyName.Empty);  
+            return this.BadRequestResult((errorCode, definition));
+        }
+
         public IActionResult Created(AtanetEntityName entity, long id) =>
             this.CreatedResult(entity, id).GetResultObject();
 

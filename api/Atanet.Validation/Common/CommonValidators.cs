@@ -7,6 +7,7 @@
     using Atanet.Model.Validation;
     using System;
     using System.Linq.Expressions;
+    using Microsoft.AspNetCore.Http;
 
     public static class CommonValidators
     {
@@ -51,40 +52,24 @@
                 .WithMessage("Text too long");
         }
 
-        public static void AddRuleForQueryText<T>(
+        public static void AddRuleForImageFile<T>(
             this AbstractAtanetValidator<T> validator,
-            Expression<Func<T, string>> property)
+            Expression<Func<T, IFormFile>> property)
         {
             validator.RuleFor(property)
-                .Must(x => !string.IsNullOrWhiteSpace(x))
+                .Must(x => x != null)
                 .WithErrorCode(ErrorCode.Parse(
                     ErrorCodeType.PropertyDataNullOrEmpty,
-                    AtanetEntityName.Post,
-                    PropertyName.Post.Query).Code)
-                .WithMessage("Cannot filter for empty string");
+                    AtanetEntityName.File,
+                    PropertyName.File.Data).Code)
+                .WithMessage("No file provided");
             validator.RuleFor(property)
-                .Must(x => !string.IsNullOrWhiteSpace(x) && x.Length >= 2)
-                .WithErrorCode(ErrorCode.Parse(
-                    ErrorCodeType.TooShort,
-                    AtanetEntityName.Post,
-                    PropertyName.Post.Query).Code)
-                .WithMessage("Please provide a query longer than a characters");
-        }
-
-        public static void AddRuleForDate<T>(
-            this AbstractAtanetValidator<T> validator,
-            Expression<Func<T, DateTime?>> dateTimeSelector,
-            DateTime min,
-            DateTime max,
-            PropertyName propertyName)
-        {
-            validator.RuleFor(dateTimeSelector)
-                .Must(x => x.HasValue && x.Value >= min && x.Value <= max)
+                .Must(x => x.ContentType.StartsWith("image/"))
                 .WithErrorCode(ErrorCode.Parse(
                     ErrorCodeType.PropertyInvalidData,
-                    AtanetEntityName.Post,
-                    propertyName).Code)
-                .WithMessage("Please provide a valid date between 2016 and 3 years in the future from now");
+                    AtanetEntityName.File,
+                    PropertyName.File.ContentType).Code)
+                .WithMessage("Must provide an image");
         }
 
         public static void AddRuleForPaging<T>(
@@ -104,37 +89,6 @@
                     AtanetEntityName.Post,
                     PropertyName.Post.Id).Code)
                 .WithMessage("Page size must be between 5 and 100 items");
-        }
-
-        public static void AddRuleForMinLength<T>(
-            this AbstractAtanetValidator<T> validator,
-            Expression<Func<T, string>> property,
-            int minimumLength,
-            AtanetEntityName entity,
-            PropertyName name)
-        {
-            validator.RuleFor(property)
-                .MinimumLength(minimumLength)
-                .WithErrorCode(ErrorCode.Parse(
-                    ErrorCodeType.TooShort,
-                    entity,
-                    name).Code)
-                .WithMessage($"{name.Name} must be at least {minimumLength} characters long");
-        }
-
-        public static void AddRuleForNotNullOrEmpty<T>(
-            this AbstractAtanetValidator<T> validator,
-            Expression<Func<T, string>> property,
-            AtanetEntityName entity,
-            PropertyName name)
-        {
-            validator.RuleFor(property)
-                .Must(x => !string.IsNullOrEmpty(x))
-                .WithErrorCode(ErrorCode.Parse(
-                    ErrorCodeType.PropertyDataNullOrEmpty,
-                    entity,
-                    name).Code)
-                .WithMessage($"{name.Name} cannot be null or empty");
         }
     }
 }

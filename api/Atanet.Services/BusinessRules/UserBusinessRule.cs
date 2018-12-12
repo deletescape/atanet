@@ -1,26 +1,32 @@
 namespace Atanet.Services.BusinessRule
 {
     using Atanet.Model.Interfaces;
+    using Atanet.Services.ApiResult;
     using Atanet.Services.Authentication;
     using Atanet.Services.BusinessRules;
+    using Atanet.Services.Exceptions;
+    using Microsoft.AspNetCore.Http;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class UserBusinessRule : BusinessRuleBase<IUserCreatedEntity>
     {
-        private readonly IUserService userService;
+        private readonly IApiResultService apiResultService;
 
-        public UserBusinessRule(IUserService userService)
+        public UserBusinessRule(IApiResultService apiResultService)
         {
-            this.userService = userService;
-        }        
+            this.apiResultService = apiResultService;
+        }
 
         public override void PreSave(IList<IUserCreatedEntity> added, IList<IUserCreatedEntity> updated, IList<IUserCreatedEntity> removed)
         {
-            var currentUserId = this.userService.GetCurrentUserId();
-            foreach (var addedItem in added)
+            foreach (var item in added.Concat(updated))
             {
-                addedItem.UserId = currentUserId;
+                if (item.UserId == default(long))
+                {
+                    throw new ApiException(this.apiResultService.UnauthorizedResult());
+                }
             }
         }
     }

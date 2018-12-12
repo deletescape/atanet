@@ -1,0 +1,33 @@
+<div>
+    <mat-toolbar color="primary">
+        <div class="icon">
+            <!-- <img src="/atanet/assets/img/atanet.png" alt="atanet" height="42" width="42"> -->
+        </div>
+        <span>a * tan(et)</span>
+        <span class="fill-remaining-space"></span>
+        <div *ngIf="authState">
+            <button class="add-post" mat-icon-button *ngIf="authState" (click)="createPost()">
+                <mat-icon>add</mat-icon>
+            </button>
+            <button class="score-text-button" mat-icon-button [disabled]="true">
+                <span class="score-text">{{score | number:'1.2-2'}}</span>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="authState">
+                <img width="100%" [src]="pictureUrl | secure | async" />
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <mat-icon>fingerprint</mat-icon>
+                    <span>{{authState && authState.email}}</span>
+                </button>
+                <button mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Logout</span>
+                </button>
+            </mat-menu>
+        </div>
+    </mat-toolbar>
+    <main>
+        <router-outlet></router-outlet>
+    </main>
+</div>

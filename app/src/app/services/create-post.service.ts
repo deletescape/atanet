@@ -9,15 +9,12 @@ export class CreatePostService {
   constructor(private httpService: AtanetHttpService) {
   }
 
-  public async createPost(createPost: CreatePost): Promise<number> {
-    const uri = 'Posts';
-    const body = {
-      text: createPost.text
-    };
-    if (createPost.fileId) {
-      body['fileId'] = createPost.fileId;
-    }
-    const result = await this.httpService.post(uri, body, CreatedResult);
-    return result.createdId;
+  public async createPost(createPost: CreatePost): Promise<CreatedResult> {
+    const uri = 'posts';
+    const formData = new FormData();
+    formData.append('Picture', createPost.file);
+    formData.append('Text', createPost.text);
+    const result = await this.httpService.post(uri, formData, CreatedResult);
+    return result;
   }
 }

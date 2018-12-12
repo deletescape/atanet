@@ -1,12 +1,2 @@
-<div class="atanet--create">
-  <div class="g-signin2" data-onsuccess="onSignIn"></div>
-  <button mat-button (click)="showDialog()">
-    <mat-icon>add</mat-icon>
-  </button>
-  <button mat-button [disabled]="isRefreshing" (click)="refresh()">
-    <mat-icon>refresh</mat-icon>
-  </button>
-  {{userEmail}}
-</div>
-<app-newest-posts #newest>
-</app-newest-posts>
+<app-all-posts #all>
+</app-all-posts>

@@ -7,6 +7,8 @@ namespace Atanet.Model.Data
     {
         public long Id { get; set; }
 
+        public string Subject { get; set; }
+
         public string Email { get; set; }
 
         public DateTime Created { get; set; }

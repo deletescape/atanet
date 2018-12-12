@@ -1,21 +1,12 @@
-<mat-form-field class="full--width">
-  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-form-field class="full-width">
   <br />
   <textarea matInput placeholder="Post text" [(ngModel)]="postText" (keyup)="$event.ctrlKey && $event.keyCode == 13 ? createPost() : null"></textarea>
 </mat-form-field>
-<div>
-  <div class="content">
+<div class="atanet-create-buttons-container">
     <input #fileInput type="file" hidden />
-    <button [disabled]="isLoading" type="button" mat-raised-button (click)="selectFile()">
-      <mat-icon>file_upload</mat-icon>
+    <button [disabled]="isLoading" type="button" class="file-button" mat-raised-button color="primary" (click)="selectFile()">
+      <mat-icon>file_upload</mat-icon> {{otherFileName}}
     </button>
-    <span (click)="onFilePreview()">{{otherFileName}}</span>
-    <button *ngIf="fileId" type="button" mat-raised-button (click)="onFilePreview()">
-      <mat-icon>fullscreen</mat-icon>
-    </button>
-  </div>
-</div>
-<div class="atanet--create--buttons--container">
-  <button class="atanet--create--buttons" [disabled]="isLoading" mat-raised-button (click)="closeDialog()">Cancel</button>
-  <button class="atanet--create--buttons" [disabled]="isLoading" mat-raised-button color="primary" (click)="createPost()">Create</button>
+  <button class="atanet-create-buttons" [disabled]="isLoading" mat-raised-button color="accent" (click)="closeDialog()">Cancel</button>
+  <button class="atanet-create-buttons" [disabled]="isLoading" mat-raised-button color="primary" (click)="createPost()">Create</button>
 </div>

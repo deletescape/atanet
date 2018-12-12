@@ -36,6 +36,8 @@ services:
       context: ./api
     env_file:
       - ./.env
+    environment:
+      - ASPNETCORE_URLS=http://*:80
     ports:
       - 9000:80
     depends_on:

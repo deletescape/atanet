@@ -1,8 +1,10 @@
 export class CreatePost {
-    constructor(text: string) {
+    constructor(text: string, file: any) {
         this.text = text;
+        this.file = file;
     }
 
     public text: string | undefined = undefined;
-    public fileId: number | undefined = undefined;
+    public file: any | undefined = undefined;
+    
 }

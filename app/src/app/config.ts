@@ -12,7 +12,7 @@ export class ConfigService {
 
     public loadConfig(): Promise<any> {
         return new Promise(async (resolve, _) => {
-            const response = await fetch('./assets/configs/config.json');
+            const response = await fetch('./assets/configs/.config.json');
             const remoteConfig: AppConfig = await response.json();
             this.settings = remoteConfig;
             resolve(remoteConfig);

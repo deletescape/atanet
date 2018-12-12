@@ -1,4 +1,10 @@
-<p>
-  {{email}}
-  <button mat-raised-button (click)="login()">LOGIN</button>
-</p>
+<div class="login">
+  <div >
+      <img src="{{url}}" class="login-center" />
+      <br />
+      <button mat-raised-button (click)="login()" class="login-center">
+        <mat-icon>person</mat-icon>
+        LOGIN
+      </button>
+  </div>
+</div>

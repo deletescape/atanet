@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 import { SnackbarService } from './snackbar.service';
 import * as moment from 'moment';
-import { Comment, File, BadRequest } from '../model';
+import { BadRequest } from '../model';
+import { ConfigService } from '../config';
+import { AuthService } from 'angular-6-social-login';
+import { Observable } from 'rxjs';
 
 declare type ConstructorType = { new(): any };
 
 @Injectable()
 export class AtanetHttpService {
-  private readonly baseUri: string = '${API_URL}';
+  private readonly baseUri: string = '';
   private readonly propertyAdapters: { propertyName: string, constructor: ConstructorType, isArray: boolean }[] = [];
+  private token: string;
 
-  constructor(private httpClient: HttpClient, private snackbarService: SnackbarService) {
+  constructor(private httpClient: HttpClient, private snackbarService: SnackbarService, private configService: ConfigService, private authService: AuthService) {
+    this.baseUri = this.configService.config.baseUrl;
     this.registerAdapters();
   }
 
@@ -23,14 +28,17 @@ export class AtanetHttpService {
 
   public async get<T>(uri: string, type: { new(): T }): Promise<T> {
     const combinedUri = this.baseUri + uri;
-    const result = await this.httpClient.get(combinedUri).toPromise();
-    return <T>result;
+    const resultObject = await this.handleRequest(
+      () => this.httpClient.get(combinedUri),
+      type,
+      false);
+    return <T>resultObject;
   }
 
   public async getArray<T>(uri: string, type: { new(): T }): Promise<T[]> {
     const combinedUri = this.baseUri + uri;
     const resultObject = await this.handleRequest(
-      () => this.httpClient.get(combinedUri).toPromise(),
+      () => this.httpClient.get(combinedUri),
       type,
       true);
     return <T[]>resultObject;
@@ -39,45 +47,47 @@ export class AtanetHttpService {
   public async post<T>(uri: string, body: any, type: { new(): T }): Promise<T> {
     const combinedUri = this.baseUri + uri;
     const resultObject = await this.handleRequest(
-      () => this.httpClient.post(combinedUri, body).toPromise(),
+      () => this.httpClient.post(combinedUri, body),
       type,
       false);
     return <T>resultObject;
   }
 
-  public async handleRequest<T>(request: () => Promise<Object>, typeConstructor: { new(): T }, isArray: boolean): Promise<T | T[]> {
-    try {
-      const response = await request();
-      if (isArray) {
-        const array = <any[]>response;
-        const resultArray = [];
-        for (const i of array) {
-          const parsedResult = this.copyProperties<T>(i, typeConstructor);
-          resultArray.push(parsedResult);
-        }
+  public async handleRequest<T>(request: () => Observable<Object>, typeConstructor: { new(): T }, isArray: boolean): Promise<T | T[]> {
+    return new Promise<T | T[]>((resolve, reject) => {
+      request().subscribe(response => {
+        if (isArray) {
+          const array = <any[]>response;
+          const resultArray = [];
+          for (const i of array) {
+            const parsedResult = this.copyProperties<T>(i, typeConstructor);
+            resultArray.push(parsedResult);
+          }
 
-        return resultArray;
-      } else {
-        const result = this.copyProperties<T>(response, typeConstructor);
-        return result;
-      }
-    } catch (error) {
-      switch (error.status) {
-        case 500:
-          this.snackbarService.showMessage(error.message, 7000);
-          break;
-        case 400:
-          const response = <BadRequest>error.error;
-          this.snackbarService.showMessage(response.message);
-          break;
-        case 401:
-          this.snackbarService.showMessage('You\'re not authorized to access this resource');
-          break;
-        case 403:
-          this.snackbarService.showMessage('Forbidden');
-          break;
-      }
-    }
+          resolve(resultArray);
+        } else {
+          const result = this.copyProperties<T>(response, typeConstructor);
+          resolve(result);
+        }
+      }, error => {
+        switch (error.status) {
+          case 500:
+            this.snackbarService.showMessage(error.message, 7000);
+            break;
+          case 400:
+            const response = <BadRequest>error.error;
+            this.snackbarService.showMessage(response.message);
+            break;
+          case 401:
+            this.snackbarService.showMessage('You\'re not authorized to access this resource');
+            break;
+          case 403:
+            this.snackbarService.showMessage('Forbidden');
+            break;
+        }
+        reject(error);
+      });
+    });
   }
 
   public copyProperties<T>(source: any, target: { new(): T }): T {
@@ -129,15 +139,15 @@ export class AtanetHttpService {
   }
 
   private registerAdapters(): void {
-    this.propertyAdapters.push({
-      propertyName: 'comments',
-      constructor: Comment,
-      isArray: true
-    });
-    this.propertyAdapters.push({
-      propertyName: 'file',
-      constructor: File,
-      isArray: false
-    });
+    // this.propertyAdapters.push({
+    //   propertyName: 'comments',
+    //   constructor: Comment,
+    //   isArray: true
+    // });
+    // this.propertyAdapters.push({
+    //   propertyName: 'file',
+    //   constructor: File,
+    //   isArray: false
+    // });
   }
 }

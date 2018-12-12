@@ -41,15 +41,7 @@
 
             public static readonly PropertyName Text = new PropertyName("TEXT");
 
-            public static readonly PropertyName Topic = new PropertyName("TAG");
-
             public static readonly PropertyName Query = new PropertyName("QUERY");
-
-            public static readonly PropertyName From = new PropertyName("FROM");
-
-            public static readonly PropertyName To = new PropertyName("TO");
-
-            public static readonly PropertyName PictureId = new PropertyName("PICTURE_ID");
         }
 
         public static class Filter
@@ -61,29 +53,25 @@
             public static readonly PropertyName CommentAmount = new PropertyName("COMMENTS");
         }
 
-        public static class Tag
-        {
-            public static readonly PropertyName Id = new PropertyName("TAG_ID");
-
-            public static readonly PropertyName TagName = new PropertyName("TAG");
-        }
-
         public static class Comment
         {
-            public static readonly PropertyName Id = new PropertyName("COMMENT_ID");
-
             public static readonly PropertyName PostId = new PropertyName("POST_ID");
         }
 
         public static class File
         {
-            public static readonly PropertyName Link = new PropertyName("LINK_ID");
-
             public static readonly PropertyName Id = new PropertyName("FILE_ID");
 
-            public static readonly PropertyName FileName = new PropertyName("FILE_NAME");
-
             public static readonly PropertyName ContentType = new PropertyName("CONTENT_TYPE");
+
+            public static readonly PropertyName Data = new PropertyName("DATA");
+        }
+
+        public static class Reaction
+        {
+            public static readonly PropertyName Id = new PropertyName("REACTION_ID");
+
+            public static readonly PropertyName ReactionState = new PropertyName("REACTION_STATE");
         }
     }
 }

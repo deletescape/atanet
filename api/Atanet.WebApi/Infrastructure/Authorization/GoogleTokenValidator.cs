@@ -4,6 +4,7 @@ namespace Atanet.WebApi.Infrastructure.Authorization
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
+    using Atanet.Services.ApiResult;
     using Atanet.Services.Exceptions;
     using Google.Apis.Auth;
     using Microsoft.IdentityModel.Tokens;
@@ -12,9 +13,12 @@ namespace Atanet.WebApi.Infrastructure.Authorization
     {
         private readonly JwtSecurityTokenHandler tokenHandler;
 
-        public GoogleTokenValidator()
+        private readonly IApiResultService apiResultService;
+
+        public GoogleTokenValidator(IApiResultService apiResultService)
         {
             this.tokenHandler = new JwtSecurityTokenHandler();
+            this.apiResultService = apiResultService;
         }
 
         public bool CanValidateToken => true;
@@ -53,7 +57,7 @@ namespace Atanet.WebApi.Infrastructure.Authorization
             }
             catch (Exception e)
             {
-                throw new ApiException(x => x.InternalServerErrorResult(e));
+                throw new ApiException(this.apiResultService.InternalServerErrorResult(e));
             }
         }
     }

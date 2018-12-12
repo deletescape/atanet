@@ -6,15 +6,22 @@
     using Atanet.Model.Validation;
     using Atanet.Services.ApiResult;
     using Atanet.Services.Files;
+    using Microsoft.AspNetCore.Authorization;
+    using Atanet.Services.Common;
 
     [Route("api/files")]
     public class FileController : Controller
     {
-        private readonly IApiResultService apiResultService;
+        private readonly IPictureService pictureService;
 
-        public FileController(IApiResultService apiResultService)
+        public FileController(IPictureService pictureService)
         {
-            this.apiResultService = apiResultService;
+            this.pictureService = pictureService;
         }
+
+        [AllowAnonymous]
+        [HttpGet("expression")]
+        public IActionResult Expression() =>
+            Redirect(this.pictureService.GetPictureUrl());
     }
 }

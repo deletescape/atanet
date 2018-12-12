@@ -20,6 +20,8 @@
 
         IApiResult BadRequestResult(params (ErrorCode code, ErrorDefinition definition)[] errors);
 
+        IApiResult BadRequestResult(string message);
+
         IApiResult BadRequestResult(ValidationResult validationResult);
 
         IApiResult BadRequestResult(IEnumerable<ValidationResult> validationResult);

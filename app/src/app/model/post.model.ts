@@ -1,5 +1,4 @@
 import { Comment } from './comment.model';
-import { File } from './file.model';
 
 export class Post {
   public id: number | undefined = undefined;
@@ -8,5 +7,4 @@ export class Post {
   public voteCount: number | undefined = undefined;
   public created: Date | undefined = undefined;
   public comments: Array<Comment> | undefined = undefined;
-  public file: File | undefined = undefined;
 }

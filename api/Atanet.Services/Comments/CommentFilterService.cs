@@ -11,7 +11,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Atanet.Model.Extensions;
+    using Atanet.Services.ApiResult;
+    using AutoMapper;
 
     public class CommentFilterService : ICommentFilterService
     {
@@ -19,10 +20,20 @@
 
         private readonly IPagingValidator pagingValidator;
 
-        public CommentFilterService(IQueryService queryService, IPagingValidator pagingValidator)
+        private readonly IApiResultService apiResultService;
+
+        private readonly IMapper mapper;
+
+        public CommentFilterService(
+            IQueryService queryService,
+            IPagingValidator pagingValidator,
+            IApiResultService apiResultService,
+            IMapper mapper)
         {
             this.queryService = queryService;
             this.pagingValidator = pagingValidator;
+            this.apiResultService = apiResultService;
+            this.mapper = mapper;
         }
 
         public IEnumerable<CommentDto> GetCommentsForPost(long postId, int page, int pageSize)
@@ -41,7 +52,7 @@
         {
             if (!this.queryService.Query<Post>().Any(x => x.Id == postId))
             {
-                throw new ApiException(x => x.BadRequestResult((
+                throw new ApiException(this.apiResultService.BadRequestResult((
                     ErrorCode.Parse(ErrorCodeType.InvalidReferenceId, AtanetEntityName.Comment, PropertyName.Comment.PostId, AtanetEntityName.Post),
                     new ErrorDefinition(postId, "The given post does not exist", PropertyName.Comment.PostId))));
             }
@@ -51,7 +62,7 @@
         {
             var fetched =
                 from comment in this.queryService.Query<Comment>().Include(x => x.User)
-                select comment.MapTo<CommentDto>();
+                select this.mapper.Map<CommentDto>(comment);
             return fetched;
         }
 

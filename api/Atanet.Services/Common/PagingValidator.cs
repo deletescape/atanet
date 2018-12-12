@@ -2,12 +2,20 @@
 {
     using Atanet.Model.ApiResponse.HTTP400;
     using Atanet.Model.Validation;
+    using Atanet.Services.ApiResult;
     using Atanet.Services.Exceptions;
     using System.Collections.Generic;
     using System.Linq;
 
     public class PagingValidator : IPagingValidator
     {
+        private readonly IApiResultService apiResultService;
+
+        public PagingValidator(IApiResultService apiResultService)
+        {
+            this.apiResultService = apiResultService;
+        }
+
         public void ThrowIfPageOutOfRange(int pageSize, int page)
         {
             var errors = new Dictionary<ErrorCode, ErrorDefinition>();
@@ -27,7 +35,7 @@
 
             if (errors.Any())
             {
-                throw new ApiException(x => x.BadRequestResult(errors));
+                throw new ApiException(this.apiResultService.BadRequestResult(errors));
             }
         }
     }

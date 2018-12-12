@@ -8,6 +8,7 @@
         protected override void Initalize()
         {
             this.AddRuleForPostText(x => x.Text, 10, 1000);
+            this.AddRuleForImageFile(x => x.Picture);
         }
     }
 }

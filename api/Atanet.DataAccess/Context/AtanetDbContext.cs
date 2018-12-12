@@ -26,7 +26,7 @@
             modelBuilder.Entity<PostReaction>()
                 .HasAlternateKey(x => new { x.PostId, x.UserId });
             modelBuilder.Entity<User>()
-                .HasAlternateKey(x => x.Email);
+                .HasAlternateKey(x => x.Subject);
                 
             modelBuilder.Entity<User>().HasMany<Post>().WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<User>().HasMany<PostReaction>().WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
