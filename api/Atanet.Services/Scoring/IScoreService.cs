@@ -1,18 +1,9 @@
 namespace Atanet.Services.Scoring
 {
+    using System.Collections.Generic;
     using System.Linq;
     using Atanet.Model.Data;
     using Atanet.Model.Dto;
-
-    public enum AtanetAction
-    {
-        DeleteLowScoreUser,
-        CreateComment,
-        ViewUserProfile,
-        CreatePost,
-        VotePost,
-        ViewOwnUserProfile
-    }
 
     public interface IScoreService
     {
@@ -23,5 +14,7 @@ namespace Atanet.Services.Scoring
         bool Can(AtanetAction action, long userId);
 
         long GetMinScore(AtanetAction action);
+
+        IEnumerable<AtanetAction> GetUserCapabilities(long userId);
     }
 }

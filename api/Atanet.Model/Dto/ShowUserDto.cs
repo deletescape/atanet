@@ -1,6 +1,7 @@
 namespace Atanet.Model.Dto
 {
     using System;
+    using System.Collections.Generic;
     using Atanet.Model.Data;
 
     public class ShowUserDto
@@ -11,5 +12,6 @@ namespace Atanet.Model.Dto
 
         public DateTime Created { get; set; }
 
+        public AtanetAction[] Capabilities { get; set; }
     }
 }

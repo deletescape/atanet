@@ -50,7 +50,7 @@ namespace Atanet.Services.Scoring
 
         public IQueryable<PostWithScoreDto> GetEnrichedPosts()
         {
-            var enrichedPosts = 
+            var enrichedPosts =
                 from post in this.queryService.Query<Post>()
                 join reaction in this.queryService.Query<PostReaction>() on post.Id equals reaction.PostId into reactions
                 select new
@@ -76,5 +76,17 @@ namespace Atanet.Services.Scoring
 
         public long GetMinScore(AtanetAction action) =>
             this.minScoresMap[action];
+
+        public IEnumerable<AtanetAction> GetUserCapabilities(long userId)
+        {
+            var score = this.CalculateUserScore(userId);
+            foreach (var entry in this.minScoresMap)
+            {
+                if (entry.Value > score)
+                {
+                    yield return entry.Key;
+                }
+            }
+        }
     }
 }

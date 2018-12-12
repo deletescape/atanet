@@ -12,6 +12,7 @@ namespace Atanet.Services.Authentication
     using Atanet.Services.ApiResult;
     using Atanet.Model.Dto;
     using AutoMapper;
+    using Atanet.Services.Scoring;
 
     public class UserService : IUserService
     {
@@ -25,6 +26,8 @@ namespace Atanet.Services.Authentication
 
         private readonly IApiResultService apiResultService;
 
+        private readonly IScoreService scoreService;
+
         private readonly IMapper mapper;
 
         public UserService(
@@ -33,6 +36,7 @@ namespace Atanet.Services.Authentication
             IUnitOfWorkFactory unitOfWorkFactory,
             IPictureService pictureService,
             IApiResultService apiResultService,
+            IScoreService scoreService,
             IMapper mapper)
         {
             this.httpContextAccessor = httpContextAccessor;
@@ -40,6 +44,7 @@ namespace Atanet.Services.Authentication
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.pictureService = pictureService;
             this.apiResultService = apiResultService;
+            this.scoreService = scoreService;
             this.mapper = mapper;
         }
 
@@ -51,7 +56,9 @@ namespace Atanet.Services.Authentication
                 throw new ApiException(this.apiResultService.NotFoundResult(AtanetEntityName.User, userId));
             }
 
-            return this.mapper.Map<ShowUserDto>(user);
+            var userDto = this.mapper.Map<ShowUserDto>(user);
+            userDto.Capabilities = this.scoreService.GetUserCapabilities(userId).ToArray();
+            return userDto;
         }
 
         public File GetUserProfilePicture(long userId)
