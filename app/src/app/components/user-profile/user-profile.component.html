@@ -1,0 +1,21 @@
+<mat-card class="user--card">
+  <mat-card-header>
+    <mat-card-title class="full--width">
+      <div class="title--container full--width">
+        {{ user.email }}
+      </div>
+    </mat-card-title>
+    <mat-card-subtitle>
+      Joined on <strong>{{ user.created | date:"yyyy-MM-dd" }}</strong>
+    </mat-card-subtitle>
+    <img mat-card-avatar src="https://raw.githubusercontent.com/atanet90/expression-pack/master/img/10004.jpg">
+  </mat-card-header>
+  <mat-card-content>
+    <h3>Capabilities</h3>
+      <mat-chip-list>
+        <mat-chip *ngFor="let action of user.capabilities">
+          {{ action | actionToString }}
+        </mat-chip>
+      </mat-chip-list>
+  </mat-card-content>
+</mat-card>

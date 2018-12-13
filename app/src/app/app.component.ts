@@ -50,9 +50,6 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.authService.authState.subscribe(authState => {
       this.authState = authState;
-      if (this.authState) {
-        this.router.navigate(['/']);
-      }
     });
     this.setScore();
     setInterval(() => {

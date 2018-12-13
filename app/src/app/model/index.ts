@@ -6,3 +6,5 @@ export * from './request.model';
 export * from './post.model';
 export * from './post-container-request.model';
 export * from './comment.model';
+export * from './user.model';
+export * from './actions.model';

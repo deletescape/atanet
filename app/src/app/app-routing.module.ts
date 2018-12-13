@@ -1,6 +1,7 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent, AtanetComponent } from './components';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 const appRoutes: Routes = [
     {
@@ -10,6 +11,10 @@ const appRoutes: Routes = [
     {
         path: '',
         component: AtanetComponent
+    },
+    {
+        path: 'user',
+        component: UserProfileComponent
     },
     {
         path: '**',
