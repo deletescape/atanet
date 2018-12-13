@@ -8,6 +8,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.AspNetCore.Authorization;
 
     [Route("api/posts")]
     public class FilterPostsController : Controller
@@ -25,6 +26,7 @@
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult FilterPosts(PagedPostDto pagedPostDto)
         {
             var posts = this.postFilterService.FilterPosts(pagedPostDto.PageNumber, pagedPostDto.PageSize, pagedPostDto.CommentNumber);

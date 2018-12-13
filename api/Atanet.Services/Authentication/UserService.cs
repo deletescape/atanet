@@ -110,6 +110,7 @@ namespace Atanet.Services.Authentication
 
             var userDto = this.mapper.Map<ShowUserDto>(user);
             userDto.Capabilities = this.scoreService.GetUserCapabilities(userId).ToArray();
+            userDto.Score = this.scoreService.CalculateUserScore(userId);
             return userDto;
         }
 

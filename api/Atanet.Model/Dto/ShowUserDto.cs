@@ -12,6 +12,8 @@ namespace Atanet.Model.Dto
 
         public DateTime Created { get; set; }
 
+        public double Score { get; set; }
+
         public AtanetAction[] Capabilities { get; set; }
     }
 }

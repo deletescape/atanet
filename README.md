@@ -6,7 +6,7 @@ The technologies used in this project are ASP.NET Core, Flask, TensorFlow and An
 
 `docker volume create atanet-volume`
 
-`cd app && npm i && cd ..`
+`cd app && npm i && ng build && cd ..`
 
 Add `.env` file
 

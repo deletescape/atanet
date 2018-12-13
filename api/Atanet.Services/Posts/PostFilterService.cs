@@ -13,6 +13,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Atanet.Services.Scoring;
 
     public class PostFilterService : IPostFilterService
     {
@@ -22,19 +23,25 @@
 
         private readonly ICommentFilterService commentFilterService;
 
+        private readonly IScoreService scoreService;
+
         public PostFilterService(
             IQueryService queryService,
             IPagingValidator pagingValidator,
-            ICommentFilterService commentFilterService)
+            ICommentFilterService commentFilterService,
+            IScoreService scoreService)
         {
             this.queryService = queryService;
             this.pagingValidator = pagingValidator;
             this.commentFilterService = commentFilterService;
+            this.scoreService = scoreService;
         }
 
         public IList<PostDto> FilterPosts(int page, int pageSize, int commentCount)
         {
-            throw new NotImplementedException();
+            var enrichedPosts = this.scoreService.GetEnrichedPosts();
+            var orderedQuery = enrichedPosts.OrderByDescending(x => x.Score);
+            
         }
 
         private IQueryable<T> Page<T>(IQueryable<T> queryable, int page, int pageSize) =>
