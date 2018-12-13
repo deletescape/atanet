@@ -60,8 +60,9 @@
                 var post = this.mapper.Map<Post>(createPostDto);
                 var picture = this.fileCreationService.CreateImageFile(unitOfWork, createPostDto.Picture);
                 post.Picture = picture;
-                post.UserId = currentUserId; 
+                post.UserId = currentUserId;
                 // post.Sentiment = TODO: sentiment analysis
+                post.Sentiment = 0.5f;
                 repository.Create(post);
                 unitOfWork.Save();
                 return post.Id;

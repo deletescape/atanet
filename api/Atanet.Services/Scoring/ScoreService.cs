@@ -27,7 +27,7 @@ namespace Atanet.Services.Scoring
 
         private readonly IApiResultService apiResultService;
 
-        private readonly long PostConstant = 20;
+        private readonly long PostConstant = 10;
 
         public ScoreService(IQueryService queryService, IApiResultService apiResultService)
         {

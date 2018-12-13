@@ -16,13 +16,12 @@
 
         private readonly IApiResultService apiResultService;
 
-        private readonly ICommentFilterService commentFilterService;
-
-        public FilterPostsController(IPostFilterService postFilterService, IApiResultService apiResultService, ICommentFilterService commentFilterService)
+        public FilterPostsController(
+            IPostFilterService postFilterService,
+            IApiResultService apiResultService)
         {
             this.postFilterService = postFilterService;
             this.apiResultService = apiResultService;
-            this.commentFilterService = commentFilterService;
         }
     }
 }

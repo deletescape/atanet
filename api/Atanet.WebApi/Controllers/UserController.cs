@@ -23,6 +23,14 @@ namespace Atanet.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        public IActionResult GetUser()
+        {
+            var currentUserId = this.userService.GetCurrentUserId();
+            return this.GetUser(currentUserId);
+        }
+
+        [Authorize]
         [HttpGet("{userId}")]
         public IActionResult GetUser(long userId)
         {
