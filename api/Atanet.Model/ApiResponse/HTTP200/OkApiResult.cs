@@ -13,7 +13,7 @@
 
         public override bool Success => true;
 
-        public override string Message { get; set; } = "OK";
+        public override string Message { get; set; } = "Success";
 
         public override object GetJsonObject()
         {
@@ -25,7 +25,7 @@
             return new
             {
                 Success = this.Success,
-                Message = "Success",
+                Message = Message
             };
         }
     }

@@ -36,6 +36,8 @@
 
         IActionResult Ok();
 
+        IActionResult Ok(string message);
+
         IActionResult Created(AtanetEntityName entity, long id);
 
         IActionResult BadRequest(IEnumerable<ValidationResult> validationResult);

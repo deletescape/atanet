@@ -32,6 +32,11 @@
             this.commentFilterService = commentFilterService;
         }
 
+        public IList<PostDto> FilterPosts(int page, int pageSize, int commentCount)
+        {
+            throw new NotImplementedException();
+        }
+
         private IQueryable<T> Page<T>(IQueryable<T> queryable, int page, int pageSize) =>
             queryable.Skip(page * pageSize).Take(pageSize);
     }

@@ -23,6 +23,14 @@ namespace Atanet.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpDelete("{userId}")]
+        public IActionResult DeleteUser(long userId)
+        {
+            this.userService.DeleteUser(userId);
+            return this.apiResultService.Ok("User deleted");
+        }
+
+        [Authorize]
         [HttpGet]
         public IActionResult GetUser()
         {

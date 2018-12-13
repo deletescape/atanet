@@ -100,6 +100,13 @@
         public IActionResult Ok() =>
             this.OkResult().GetResultObject();
 
+        public IActionResult Ok(string message)
+        {
+            var result = new OkApiResult(new object());
+            result.Message = message;
+            return result.GetResultObject();
+        }
+
         private IDictionary<ErrorCode, ErrorDefinition> GetErrorDefinitionsFromValidationResult(ValidationResult result)
         {
             var dic = new Dictionary<ErrorCode, ErrorDefinition>();

@@ -6,5 +6,6 @@
 
     public interface IPostFilterService
     {
+        IList<PostDto> FilterPosts(int page, int pageSize, int commentCount);
     }
 }

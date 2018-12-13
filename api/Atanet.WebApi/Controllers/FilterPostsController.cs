@@ -23,5 +23,12 @@
             this.postFilterService = postFilterService;
             this.apiResultService = apiResultService;
         }
+
+        [HttpGet]
+        public IActionResult FilterPosts(PagedPostDto pagedPostDto)
+        {
+            var posts = this.postFilterService.FilterPosts(pagedPostDto.PageNumber, pagedPostDto.PageSize, pagedPostDto.CommentNumber);
+            return this.apiResultService.Ok(posts);
+        }
     }
 }

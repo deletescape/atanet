@@ -16,6 +16,8 @@ namespace Atanet.Services.Authentication
 
     public class UserService : IUserService
     {
+        public const int LowScoreUser = -100;
+
         private readonly IHttpContextAccessor httpContextAccessor;
 
         private readonly IQueryService queryService;
@@ -48,8 +50,58 @@ namespace Atanet.Services.Authentication
             this.mapper = mapper;
         }
 
+        public bool IsLowScoreUser(long userId)
+        {
+            return this.scoreService.CalculateUserScore(userId) < UserService.LowScoreUser;
+        }
+
+        public void UpdateProfilePicture(long userId)
+        {
+            using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var userRepository = unitOfWork.CreateEntityRepository<User>();
+                var user = userRepository.FindById(userId);
+                user.Picture = this.pictureService.GetAtanetPicture(unitOfWork);
+                userRepository.Update(user);
+                unitOfWork.Save();
+            }
+        }
+
+        public void DeleteUser(long userId)
+        {
+            var currentUserId = this.GetCurrentUserId();
+            if (currentUserId == userId)
+            {
+                // Easter egg: update profile picture if user tries to delete himself
+                UpdateProfilePicture(currentUserId);
+                return;
+            }
+
+            if (this.scoreService.Can(AtanetAction.DeleteLowScoreUser, currentUserId) &&
+                this.IsLowScoreUser(userId))
+            {
+                using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
+                {
+                    var userRepository = unitOfWork.CreateEntityRepository<User>();
+                    userRepository.Delete(x => x.Id == userId);
+                    unitOfWork.Save();
+                }
+            }
+        }
+
         public ShowUserDto GetUserInfo(long userId)
         {
+            if (!this.scoreService.Can(AtanetAction.ViewUserProfile, userId))
+            {
+                throw new ApiException(this.apiResultService.BadRequestResult("User cannot view user profiles"));
+            }
+
+            var currentUserId = this.GetCurrentUserId();
+            if (currentUserId == userId && !this.scoreService.Can(AtanetAction.ViewOwnUserProfile, currentUserId))
+            {
+                throw new ApiException(this.apiResultService.BadRequestResult("User cannot view own user profile"));
+            }
+
             var user = this.queryService.Query<User>().FirstOrDefault(x => x.Id == userId);
             if (user == null)
             {

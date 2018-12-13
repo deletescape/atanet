@@ -9,6 +9,7 @@ namespace Atanet.Services.Posts.Reactions
     using Atanet.Services.ApiResult;
     using Atanet.Services.Authentication;
     using Atanet.Services.Exceptions;
+    using Atanet.Services.Scoring;
     using Atanet.Services.UoW;
 
     public class PostReactionCreationService : IPostReactionCreationService
@@ -21,16 +22,20 @@ namespace Atanet.Services.Posts.Reactions
 
         private readonly IUserService userService;
 
+        private readonly IScoreService scoreService;
+
         public PostReactionCreationService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IQueryService queryService,
             IApiResultService apiResultService,
-            IUserService userService)
+            IUserService userService,
+            IScoreService scoreService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.queryService = queryService;
             this.apiResultService = apiResultService;
             this.userService = userService;
+            this.scoreService = scoreService;
         }
 
         public long AddReaction(long postId, CreateReactionDto createReactionDto)
@@ -41,6 +46,11 @@ namespace Atanet.Services.Posts.Reactions
             }
 
             var currentUserId = this.userService.GetCurrentUserId();
+            if (!this.scoreService.Can(AtanetAction.VotePost, currentUserId))
+            {
+                throw new ApiException(this.apiResultService.BadRequestResult("User cannot vote on posts"));
+            }
+
             if (this.queryService.Query<PostReaction>().Any(x => x.PostId == postId && x.UserId == currentUserId))
             {
                 throw new ApiException(this.apiResultService.BadRequestResult((

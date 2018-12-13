@@ -11,5 +11,7 @@ namespace Atanet.Services.Authentication
         long GetCurrentUserId();
 
         File GetUserProfilePicture(long userId);
+
+        void DeleteUser(long userId);
     }
 }
