@@ -15,15 +15,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.command == 'train':
         dataset = EnglishTwitterDataset()
-        model = LanguageModel(dataset.get_word_count(), dataset.get_max_x_text_length(), dataset.get_language())
-        (x_train, y_train), (x_test, y_test) = dataset.get_data()
-        model.train(x_train, y_train, x_test, y_test)
-        while True:
-            i = input('Text: ')
-            seq = dataset.text_to_sequence(i)
-            print(seq)
-            res = model.predict(seq)
-            print(res)
+
+        model = LanguageModel(dataset.get_word_count(), dataset.get_max_x_text_length(), dataset)
+        model.train()
+        model.save()
+
     elif args.command == 'serve':
         pass
     else:

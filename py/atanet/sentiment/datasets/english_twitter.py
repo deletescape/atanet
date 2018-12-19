@@ -48,8 +48,8 @@ class EnglishTwitterDataset(SentimentDataset):
         return (self.x_train_pad, self.y_train), (self.x_test_pad, self.y_test)
 
 
-    def text_to_sequence(self, text: str):
-        sequences = self.tokenizer.texts_to_sequences([text])
+    def text_to_sequence(self, text: str, tokenizer: keras.preprocessing.text.Tokenizer):
+        sequences = tokenizer.texts_to_sequences([text])
         return keras.preprocessing.sequence.pad_sequences(sequences, maxlen=self._max_x_length, padding='post')
 
 
@@ -63,3 +63,7 @@ class EnglishTwitterDataset(SentimentDataset):
 
     def get_max_x_text_length(self) -> int:
         return self._max_x_length
+
+
+    def get_tokenizer(self) -> keras.preprocessing.text.Tokenizer:
+        return self.tokenizer

@@ -1,3 +1,4 @@
+from tensorflow import keras
 from abc import ABC, abstractmethod
 from atanet.sentiment.language.language import Language
 
@@ -10,7 +11,7 @@ class SentimentDataset(ABC):
 
 
     @abstractmethod
-    def text_to_sequence(self, text: str):
+    def text_to_sequence(self, text: str, tokenizer: keras.preprocessing.text.Tokenizer):
         return
 
 
@@ -26,4 +27,9 @@ class SentimentDataset(ABC):
 
     @abstractmethod
     def get_max_x_text_length(self) -> int:
+        return
+
+    
+    @abstractmethod
+    def get_tokenizer(self) -> keras.preprocessing.text.Tokenizer:
         return
