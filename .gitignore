@@ -265,3 +265,6 @@ __pycache__/
 *.pyc
 
 dbpedia_data/
+
+
+py/atanet/sentiment/datasets/twitter_english.csv

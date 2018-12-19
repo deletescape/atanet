@@ -77,35 +77,44 @@ namespace Atanet.Services.Authentication
                 return;
             }
 
-            if (this.scoreService.Can(AtanetAction.DeleteLowScoreUser, currentUserId) &&
-                this.IsLowScoreUser(userId))
+            if (!this.scoreService.Can(AtanetAction.DeleteLowScoreUser, currentUserId))
             {
-                using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
-                {
-                    var userRepository = unitOfWork.CreateEntityRepository<User>();
-                    userRepository.Delete(x => x.Id == userId);
-                    unitOfWork.Save();
-                }
+                var minScore = this.scoreService.GetMinScore(AtanetAction.DeleteLowScoreUser);
+                throw new ApiException(this.apiResultService.BadRequestResult($"You can only delete low score users, if you have a score greater than {minScore}"));
+            }
+
+            if (!this.IsLowScoreUser(userId))
+            {
+                throw new ApiException(this.apiResultService.BadRequestResult($"User is not a low score user ({LowScoreUser})"));
+            }
+
+            using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var userRepository = unitOfWork.CreateEntityRepository<User>();
+                userRepository.Delete(x => x.Id == userId);
+                unitOfWork.Save();
             }
         }
 
         public ShowUserDto GetUserInfo(long userId)
         {
-            if (!this.scoreService.Can(AtanetAction.ViewUserProfile, userId))
-            {
-                throw new ApiException(this.apiResultService.BadRequestResult("User cannot view user profiles"));
-            }
-
-            var currentUserId = this.GetCurrentUserId();
-            if (currentUserId == userId && !this.scoreService.Can(AtanetAction.ViewOwnUserProfile, currentUserId))
-            {
-                throw new ApiException(this.apiResultService.BadRequestResult("User cannot view own user profile"));
-            }
-
             var user = this.queryService.Query<User>().FirstOrDefault(x => x.Id == userId);
             if (user == null)
             {
                 throw new ApiException(this.apiResultService.NotFoundResult(AtanetEntityName.User, userId));
+            }
+
+            var currentUserId = this.GetCurrentUserId();
+            if (!this.scoreService.Can(AtanetAction.ViewUserProfile, currentUserId))
+            {
+                var minScore = this.scoreService.GetMinScore(AtanetAction.ViewUserProfile);
+                throw new ApiException(this.apiResultService.BadRequestResult($"User must have a score greater than {minScore} in order to view user profiles"));
+            }
+
+            if (currentUserId == userId && !this.scoreService.Can(AtanetAction.ViewOwnUserProfile, currentUserId))
+            {
+                var minScore = this.scoreService.GetMinScore(AtanetAction.ViewOwnUserProfile);
+                throw new ApiException(this.apiResultService.BadRequestResult($"You cannot view your own profile unless you have a score greater than {minScore}"));
             }
 
             var userDto = this.mapper.Map<ShowUserDto>(user);

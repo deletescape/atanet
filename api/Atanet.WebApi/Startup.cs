@@ -42,6 +42,7 @@
     using Atanet.Services.Scoring;
     using Atanet.Model.Mappings.User;
     using Atanet.Services.Posts.Reactions;
+    using Atanet.Validation.Dto.Post;
 
     public class Startup
     {
@@ -129,13 +130,12 @@
             services.AddSingleton<IPagingValidator, PagingValidator>();
             services.AddSingleton<IBusinessRuleRegistry, BaseBusinessRuleRegistry>();
             services.AddSingleton<IConnectionStringBuilder, ConnectionStringBuilder>();
-            ServiceLocator.SetServiceLocator(() => services.BuildServiceProvider());
 
             var context = services.BuildServiceProvider().GetService<AtanetDbContext>();
             context.Database.EnsureCreated();
 
             // This instance needs to be created for the compiler to reference the Atanet.Validation assembly
-            var instance = new PostDtoValidator();
+            var instance = new PagedPostDtoValidator();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)

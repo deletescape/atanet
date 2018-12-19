@@ -1,6 +1,8 @@
 ﻿namespace Atanet.Model.Dto
 {
     using System;
+    using System.Collections.Generic;
+    using Atanet.Model.Data;
 
     public class PostDto
     {
@@ -8,12 +10,14 @@
 
         public string Text { get; set; }
 
-        public long VoteCount { get; set; }
+        public double Score { get; set; }
 
         public DateTime Created { get; set; }
 
+        public UserDto User { get; set; }
+
         public CommentDto[] Comments { get; set; }
 
-        public FileInfoDto File { get; set; }
+        public IDictionary<ReactionState, int> Reactions { get; set; }
     }
 }

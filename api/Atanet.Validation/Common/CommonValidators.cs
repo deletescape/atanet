@@ -64,7 +64,7 @@
                     PropertyName.File.Data).Code)
                 .WithMessage("No file provided");
             validator.RuleFor(property)
-                .Must(x => x.ContentType.StartsWith("image/"))
+                .Must(x => x?.ContentType?.StartsWith("image/") ?? false)
                 .WithErrorCode(ErrorCode.Parse(
                     ErrorCodeType.PropertyInvalidData,
                     AtanetEntityName.File,

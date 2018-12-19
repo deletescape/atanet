@@ -8,6 +8,7 @@
     using Atanet.Services.ApiResult;
     using Atanet.Services.Authentication;
     using Atanet.Services.Exceptions;
+    using Atanet.Services.Scoring;
     using Atanet.Services.UoW;
     using AutoMapper;
 
@@ -23,18 +24,22 @@
 
         private readonly IMapper mapper;
 
+        private readonly IScoreService scoreService;
+
         public CommentCreationService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IQueryService queryService,
             IUserService userService,
             IApiResultService apiResultService,
-            IMapper mapper)
+            IMapper mapper,
+            IScoreService scoreService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.queryService = queryService;
             this.userService = userService;
             this.apiResultService = apiResultService;
             this.mapper = mapper;
+            this.scoreService = scoreService;
         }
 
         public long CreateComment(long postId, CreateCommentDto createCommentDto)
@@ -47,6 +52,12 @@
             }
 
             var currentUserId = this.userService.GetCurrentUserId();
+            if (!this.scoreService.Can(AtanetAction.CreateComment, currentUserId))
+            {
+                var minScore = this.scoreService.GetMinScore(AtanetAction.CreateComment);
+                throw new ApiException(this.apiResultService.BadRequestResult($"User must have a score greater than {minScore} in order to create comments"));
+            }
+
             using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
             {
                 var comment = this.mapper.Map<Comment>(createCommentDto);

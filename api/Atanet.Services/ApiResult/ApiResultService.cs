@@ -5,10 +5,8 @@
     using Atanet.Model.ApiResponse;
     using Atanet.Model.ApiResponse.HTTP200;
     using Atanet.Model.ApiResponse.HTTP201;
-    using Atanet.Model.ApiResponse.HTTP204;
     using Atanet.Model.ApiResponse.HTTP400;
     using Atanet.Model.ApiResponse.HTTP401;
-    using Atanet.Model.ApiResponse.HTTP403;
     using Atanet.Model.ApiResponse.HTTP404;
     using Atanet.Model.ApiResponse.HTTP500;
     using Atanet.Model.Validation;
@@ -20,9 +18,6 @@
     {
         public IActionResult BadRequest(IEnumerable<ValidationResult> validationResult) =>
             this.BadRequestResult(validationResult).GetResultObject();
-
-        public IApiResult NoContentResult() =>
-            new NoContentApiResult();
 
         public IApiResult BadRequestResult(IDictionary<ErrorCode, ErrorDefinition> errors) =>
             new BadRequestApiResult(errors);
@@ -64,18 +59,6 @@
         public IApiResult CreatedResult(AtanetEntityName entity, long id) =>
             new CreatedApiResult(entity, id);
 
-        public IApiResult ForbiddenResult(AtanetEntityName accessedEntity, long accessedEntityId)
-        {
-            try
-            {
-                return new ForbiddenApiResult(-1, accessedEntity, accessedEntityId);
-            }
-            catch (InvalidCastException)
-            {
-                return this.UnauthorizedResult();
-            }
-        }
-
         public IActionResult InternalServerError(Exception ex) => 
             this.InternalServerErrorResult(ex).GetResultObject();
 
@@ -96,9 +79,6 @@
 
         public IApiResult OkResult() =>
             new OkApiResult(null);
-
-        public IActionResult Ok() =>
-            this.OkResult().GetResultObject();
 
         public IActionResult Ok(string message)
         {

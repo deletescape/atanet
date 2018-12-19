@@ -13,7 +13,6 @@ namespace Atanet.Services.Common
 
         private const string PictureSource = "https://atanet90.github.io/expression-pack/img/{0}.jpg";
         private const int MaxImages = 88241;
-        private const string FileName = "{0}.jpg";
         private const int ImageSize = 128;
 
         private readonly Random random = new Random();

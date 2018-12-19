@@ -34,8 +34,6 @@
 
         IActionResult Ok(object obj);
 
-        IActionResult Ok();
-
         IActionResult Ok(string message);
 
         IActionResult Created(AtanetEntityName entity, long id);

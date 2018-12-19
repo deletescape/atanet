@@ -48,7 +48,8 @@ namespace Atanet.Services.Posts.Reactions
             var currentUserId = this.userService.GetCurrentUserId();
             if (!this.scoreService.Can(AtanetAction.VotePost, currentUserId))
             {
-                throw new ApiException(this.apiResultService.BadRequestResult("User cannot vote on posts"));
+                var minScore = this.scoreService.GetMinScore(AtanetAction.VotePost);
+                throw new ApiException(this.apiResultService.BadRequestResult($"Must have a score greater than {minScore} in order to vote for posts"));
             }
 
             if (this.queryService.Query<PostReaction>().Any(x => x.PostId == postId && x.UserId == currentUserId))

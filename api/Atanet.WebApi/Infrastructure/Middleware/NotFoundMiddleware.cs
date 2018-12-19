@@ -22,7 +22,7 @@
             await this.next(context);
             if (context.Response.StatusCode == StatusCodes.Status404NotFound)
             {
-                var apiResultService = ServiceLocator.Instance.GetService<IApiResultService>();
+                var apiResultService = context.RequestServices.GetService<IApiResultService>();
                 context.Response.ContentType = "application/json";
                 var result = apiResultService.NotFoundResult(AtanetEntityName.Unspecified, -1);
                 result.Message = "Route not found";

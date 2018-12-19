@@ -13,8 +13,7 @@
                 .ForMember(x => x.Id, x => x.MapFrom(p => p.Id))
                 .ForMember(x => x.Text, x => x.MapFrom(p => p.Text))
                 .ForMember(x => x.PostId, x => x.MapFrom(p => p.PostId))
-                .ForMember(x => x.UserId, x => x.MapFrom(p => p.UserId))
-                .ForMember(x => x.UserEmail, x => x.MapFrom(p => p.User.Email))
+                .ForMember(x => x.User, x => x.Ignore())
                 .ReverseMap();
         }
     }

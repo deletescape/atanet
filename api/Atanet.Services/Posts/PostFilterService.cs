@@ -14,6 +14,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Atanet.Services.Scoring;
+    using AutoMapper;
 
     public class PostFilterService : IPostFilterService
     {
@@ -25,23 +26,59 @@
 
         private readonly IScoreService scoreService;
 
+        private readonly IMapper mapper;
+
         public PostFilterService(
             IQueryService queryService,
             IPagingValidator pagingValidator,
             ICommentFilterService commentFilterService,
-            IScoreService scoreService)
+            IScoreService scoreService,
+            IMapper mapper)
         {
             this.queryService = queryService;
             this.pagingValidator = pagingValidator;
             this.commentFilterService = commentFilterService;
             this.scoreService = scoreService;
+            this.mapper = mapper;
         }
 
         public IList<PostDto> FilterPosts(int page, int pageSize, int commentCount)
         {
+            this.pagingValidator.ThrowIfPageOutOfRange(pageSize, page);
             var enrichedPosts = this.scoreService.GetEnrichedPosts();
             var orderedQuery = enrichedPosts.OrderByDescending(x => x.Score);
-            
+            var fetchedPage = orderedQuery.Skip(pageSize * page).Take(pageSize);
+            var results =
+                from post in fetchedPage
+                join user in this.queryService.Query<User>() on post.Post.UserId equals user.Id
+                join reaction in this.queryService.Query<PostReaction>() on post.Post.Id equals reaction.PostId into reactions
+                join comment in this.queryService.Query<Comment>().Include(x => x.User) on post.Post.Id equals comment.PostId into comments
+                select new PostDto
+                {
+                    Created = post.Post.Created,
+                    Score = post.Score,
+                    Id = post.Post.Id,
+                    Reactions = reactions.GroupBy(x => x.ReactionState).ToDictionary(x => x.Key, x => x.Count()),
+                    Text = post.Post.Text,
+                    User = new UserDto
+                    {
+                        Email = user.Email,
+                        Id = user.Id
+                    },
+                    Comments = comments.Select(x => new CommentDto
+                    {
+                        Created = x.Created,
+                        Id = x.Id,
+                        PostId = x.PostId,
+                        Text = x.Text,
+                        User = new UserDto
+                        {
+                            Email = x.User.Email,
+                            Id = x.UserId
+                        }
+                    }).ToArray()
+                };
+            return results.ToList();
         }
 
         private IQueryable<T> Page<T>(IQueryable<T> queryable, int page, int pageSize) =>
