@@ -49,10 +49,10 @@ class LanguageModel:
         sequences = self._dataset.text_to_sequence(x)
         return self._model.predict(sequences)
 
-    
+
     def get_model_name(self):
         return f'./trained_{self._name}.hdf5'
 
-    
+
     def get_tokenizer_name(self):
         return f'./trained_{self._name}_tokenizer.pickle'
