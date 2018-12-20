@@ -8,7 +8,7 @@ The technologies used in this project are ASP.NET Core, Flask, TensorFlow and An
 
 Add `.env` file
 
-`
+```
 ASPNETCORE_ENVIRONMENT=Development
 GOOGLE_CLIENT_ID=client_id
 
@@ -19,7 +19,7 @@ MYSQL_DATtABASE=Atanet
 DATABASE_PORT=3306
 # either db or ip
 DATABASE_HOST=db
-`
+```
 
 `docker-compose up`
 
