@@ -1,7 +1,10 @@
-FROM python:3.6
+FROM python:3.6.5-stretch
 WORKDIR /serve
-RUN export PATH="$PATH:/root/.local/bin"
 COPY ./ ./
-RUN python -m pip install --user pipenv
-RUN pipenv install
-CMD ["python", "-m", "atanet", "serve"]
+
+RUN rm -f Pipfile.lock && \
+    pip install pipenv && \
+    pipenv install --deploy && \
+    pipenv run python -m pip uninstall --yes tensorflow-gpu && \
+    pipenv run python -m pip install tensorflow
+CMD ["pipenv", "run", "python", "-m", "atanet", "serve"]

@@ -44,11 +44,12 @@ namespace Atanet.Services.Scoring
             }
 
             var difference = (DateTime.Now - userCreationDate).TotalDays;
-            var postScoreForUser = this.GetEnrichedPosts().Where(x => x.Post.UserId == userId).Sum(x => x.Score);
-            return postScoreForUser + difference;
+            var postsForUser = this.GetEnrichedPosts(withTimeInCalculation: false)
+                .Where(x => x.Post.UserId == userId);
+            return postsForUser.Sum(x => x.Score) + difference;
         }
 
-        public IQueryable<PostWithScoreDto> GetEnrichedPosts()
+        public IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation)
         {
             var enrichedPosts =
                 from post in this.queryService.Query<Post>()
@@ -63,7 +64,7 @@ namespace Atanet.Services.Scoring
             return enrichedPosts.Select(x => new PostWithScoreDto
             {
                 Post = x.Post,
-                Score = x.Reactions.Sum(p => (int)p.ReactionState) - (DateTime.Now - x.Post.Created).TotalDays + x.InitialPostScore
+                Score = x.Reactions.Sum(p => (int)p.ReactionState) - (withTimeInCalculation ? (DateTime.Now - x.Post.Created).TotalDays : 0) + x.InitialPostScore
             });
         }
 

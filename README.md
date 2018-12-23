@@ -15,13 +15,20 @@ GOOGLE_CLIENT_ID=client_id
 MYSQL_ROOT_PASSWORD=password
 MYSQL_USER=atanet
 MYSQL_PASSWORD=password
-MYSQL_DATtABASE=Atanet
+MYSQL_DATABASE=Atanet
 DATABASE_PORT=3306
 # either db or ip
 DATABASE_HOST=db
+ASPNETCORE_URLS=http://localhost:9000
 ```
 
 `docker-compose up`
 
 Connect to db:
 `mysql -u atanet -h 172.19.0.1 -P 9001 -D Atanet -p`
+
+
+Train with CPU:
+- `cd py && pipenv shell`
+- Run `python -m pip uninstall --yes tensorflow-gpu && python -m pip install tensorflow`
+- Revert with `python -m pip uninstall --yes tensorflow && python -m pip install tensorflow-gpu`

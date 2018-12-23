@@ -9,7 +9,7 @@ namespace Atanet.Services.Scoring
     {
         double CalculateUserScore(long userId);
 
-        IQueryable<PostWithScoreDto> GetEnrichedPosts();
+        IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation);
 
         bool Can(AtanetAction action, long userId);
 

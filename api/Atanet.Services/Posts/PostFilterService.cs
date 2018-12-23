@@ -45,7 +45,7 @@
         public IList<PostDto> FilterPosts(int page, int pageSize, int commentCount)
         {
             this.pagingValidator.ThrowIfPageOutOfRange(pageSize, page);
-            var enrichedPosts = this.scoreService.GetEnrichedPosts();
+            var enrichedPosts = this.scoreService.GetEnrichedPosts(withTimeInCalculation: true);
             var orderedQuery = enrichedPosts.OrderByDescending(x => x.Score);
             var fetchedPage = orderedQuery.Skip(pageSize * page).Take(pageSize);
             var results =

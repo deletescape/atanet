@@ -54,7 +54,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - 9003:80
+      - 9003:9003
     networks:
       - default
 

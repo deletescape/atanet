@@ -2,7 +2,9 @@ import nltk
 from argparse import ArgumentParser
 from atanet.sentiment.model import LanguageModel
 from atanet.sentiment.datasets.english_twitter import EnglishTwitterDataset
+from atanet.sentiment.datasets.simplified_chinese import SimplifiedChineseDataset
 from atanet.sentiment.language.language import Language
+from atanet.api.model_server import run
 
 
 def maybe_download_nltk_dependencies():
@@ -14,13 +16,20 @@ if __name__ == '__main__':
     parser.add_argument('command')
     args = parser.parse_args()
     if args.command == 'train':
-        dataset = EnglishTwitterDataset()
+        chinese_dataset = SimplifiedChineseDataset()
+        chinese_model = LanguageModel(chinese_dataset)
+        chinese_model.epochs = 5
 
-        model = LanguageModel(dataset.get_word_count(), dataset.get_max_x_text_length(), dataset)
-        model.train()
-        model.save()
+        english_dataset = EnglishTwitterDataset()
+        english_model = LanguageModel(english_dataset)
+        english_model.epochs = 1
+
+        models = [chinese_model, english_model]
+        for model in models:
+            model.train()
+            model.save()
 
     elif args.command == 'serve':
-        pass
+        run()
     else:
         raise ValueError('Invalid command line option')

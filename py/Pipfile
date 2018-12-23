@@ -7,11 +7,13 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-flask = "*"
+flask = "==1.0.2"
+nltk = "==3.4"
+langid = "==1.1.6"
+pandas = "==0.23.4"
 tensorflow-gpu = "*"
-nltk = "*"
-langid = "*"
-pandas = "*"
+requests = "*"
+keras = "*"
 
 [requires]
 python_version = "3.6.5"
