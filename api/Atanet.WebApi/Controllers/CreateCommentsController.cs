@@ -1,11 +1,11 @@
 ﻿namespace Atanet.WebApi.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Atanet.Model.Dto;
-    using Atanet.Model.Validation;
-    using Atanet.Services.ApiResult;
-    using Atanet.Services.Comments;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Model.Dto;
+    using Model.Validation;
+    using Services.ApiResult;
+    using Services.Comments;
 
     [Route("api/posts")]
     public class CreateCommentsController : Controller

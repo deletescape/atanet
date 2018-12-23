@@ -76,4 +76,4 @@ def predict():
 def run():
     key = 'ASPNETCORE_ENVIRONMENT'
     debug = os.environ[key] == 'Development' if key in os.environ else False
-    app.run(host='0.0.0.0', port=9003, debug=debug)
+    app.run(host='0.0.0.0', port=os.environ['SENTIMENT_PORT'], debug=debug)

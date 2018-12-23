@@ -1,8 +1,8 @@
 ﻿namespace Atanet.WebApi.Infrastructure
 {
     using Microsoft.AspNetCore.Mvc.Filters;
-    using Atanet.Services.ApiResult;
-    using Atanet.Services.Exceptions;
+    using Services.ApiResult;
+    using Services.Exceptions;
 
     public class GlobalExceptionFilter : IExceptionFilter
     {

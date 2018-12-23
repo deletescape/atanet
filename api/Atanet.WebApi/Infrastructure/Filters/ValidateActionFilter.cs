@@ -1,12 +1,12 @@
 ﻿namespace Atanet.WebApi.Infrastructure.Filters
 {
-    using FluentValidation;
-    using FluentValidation.Results;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using Atanet.Services.ApiResult;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using FluentValidation;
+    using FluentValidation.Results;
+    using Microsoft.AspNetCore.Mvc.Filters;
+    using Services.ApiResult;
 
     public class ValidateActionFilter : IActionFilter
     {

@@ -1,13 +1,4 @@
-import nltk
 from argparse import ArgumentParser
-from atanet.sentiment.model import LanguageModel
-from atanet.sentiment.datasets.english_twitter import EnglishTwitterDataset
-from atanet.sentiment.datasets.simplified_chinese import SimplifiedChineseDataset
-from atanet.sentiment.language.language import Language
-
-
-def maybe_download_nltk_dependencies():
-    nltk.download('punkt')
 
 
 if __name__ == '__main__':
@@ -15,6 +6,10 @@ if __name__ == '__main__':
     parser.add_argument('command')
     args = parser.parse_args()
     if args.command == 'train':
+        from atanet.sentiment.model import LanguageModel
+        from atanet.sentiment.datasets.english_twitter import EnglishTwitterDataset
+        from atanet.sentiment.datasets.simplified_chinese import SimplifiedChineseDataset
+
         chinese_dataset = SimplifiedChineseDataset()
         chinese_model = LanguageModel(chinese_dataset)
         chinese_model.epochs = 5

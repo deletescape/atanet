@@ -1,16 +1,11 @@
 namespace Atanet.WebApi.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Atanet.Model.Dto;
-    using Atanet.Services.ApiResult;
-    using Atanet.Services.Comments;
-    using Atanet.Services.Posts;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Microsoft.AspNetCore.Authorization;
-    using Atanet.Services.Posts.Reactions;
-    using Atanet.Model.Validation;
+    using Microsoft.AspNetCore.Mvc;
+    using Model.Dto;
+    using Model.Validation;
+    using Services.ApiResult;
+    using Services.Posts.Reactions;
 
     [Route("api/posts")]
     public class PostReactionController : Controller

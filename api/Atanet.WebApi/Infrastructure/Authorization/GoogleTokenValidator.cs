@@ -4,10 +4,10 @@ namespace Atanet.WebApi.Infrastructure.Authorization
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
-    using Atanet.Services.ApiResult;
-    using Atanet.Services.Exceptions;
     using Google.Apis.Auth;
     using Microsoft.IdentityModel.Tokens;
+    using Services.ApiResult;
+    using Services.Exceptions;
 
     public class GoogleTokenValidator : ISecurityTokenValidator
     {
@@ -47,7 +47,7 @@ namespace Atanet.WebApi.Infrastructure.Authorization
                 new Claim(JwtRegisteredClaimNames.GivenName, payload.GivenName),
                 new Claim(JwtRegisteredClaimNames.Email, payload.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, payload.Subject),
-                new Claim(JwtRegisteredClaimNames.Iss, payload.Issuer),
+                new Claim(JwtRegisteredClaimNames.Iss, payload.Issuer)
             };
 
             try

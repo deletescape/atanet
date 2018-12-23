@@ -1,14 +1,11 @@
 ﻿namespace Atanet.WebApi.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Atanet.Model.Dto;
-    using Atanet.Services.ApiResult;
-    using Atanet.Services.Comments;
-    using Atanet.Services.Posts;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Model.Dto;
+    using Services.ApiResult;
+    using Services.Comments;
+    using Services.Posts;
 
     [Route("api/posts")]
     public class FilterPostsController : Controller

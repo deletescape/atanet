@@ -10,10 +10,10 @@
         private const string AtanetAssemblyIdentifier = "Atanet";
 
         private static Lazy<List<Assembly>> atanetAssemblies = new Lazy<List<Assembly>>(
-            () => AssemblyUtilities.IterateAssemblies().ToList());
+            () => IterateAssemblies().ToList());
 
         public static IEnumerable<Assembly> GetAtanetAssemblies() =>
-            AssemblyUtilities.atanetAssemblies.Value;
+            atanetAssemblies.Value;
 
         private static IEnumerable<Assembly> IterateAssemblies()
         {
@@ -21,7 +21,7 @@
             var assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
             foreach (var assembly in assemblies)
             {
-                if (assembly.Name.Contains(AssemblyUtilities.AtanetAssemblyIdentifier))
+                if (assembly.Name.Contains(AtanetAssemblyIdentifier))
                 {
                     var loaded = Assembly.Load(assembly);
                     yield return loaded;

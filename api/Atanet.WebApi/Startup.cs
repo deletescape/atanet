@@ -1,48 +1,44 @@
 ﻿namespace Atanet.WebApi
 {
-    using AutoMapper;
-    using FluentValidation;
-    using FluentValidation.AspNetCore;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http.Features;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
-    using Atanet.DataAccess.Context;
-    using Atanet.Model.Settings;
-    using Atanet.Services;
-    using Atanet.Services.ApiResult;
-    using Atanet.Services.Assembly;
-    using Atanet.Services.BusinessRules.Interfaces;
-    using Atanet.Services.BusinessRules.Registry;
-    using Atanet.Services.BusinessRules.Registry.Interfaces;
-    using Atanet.Services.Comments;
-    using Atanet.Services.Common;
-    using Atanet.Services.Files;
-    using Atanet.Services.Posts;
-    using Atanet.Services.UoW;
-    using Atanet.Services.Validation;
-    using Atanet.Validation.Dto.Newsletter;
-    using Atanet.WebApi.Infrastructure;
-    using Atanet.WebApi.Infrastructure.Filters;
-    using Atanet.WebApi.Infrastructure.Middleware;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using System.Data.SqlClient;
-    using System.Net.NetworkInformation;
+    using AutoMapper;
+    using DataAccess.Context;
+    using FluentValidation;
+    using FluentValidation.AspNetCore;
+    using Infrastructure;
+    using Infrastructure.Authorization;
+    using Infrastructure.Filters;
+    using Infrastructure.Middleware;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Atanet.WebApi.Infrastructure.Authorization;
-    using Atanet.Services.Authentication;
-    using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Atanet.Services.Scoring;
-    using Atanet.Model.Mappings.User;
-    using Atanet.Services.Posts.Reactions;
-    using Atanet.Validation.Dto.Post;
+    using Microsoft.AspNetCore.Http.Features;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Microsoft.Extensions.Options;
+    using Model.Settings;
+    using Services.ApiResult;
+    using Services.Assembly;
+    using Services.Authentication;
+    using Services.BusinessRules.Interfaces;
+    using Services.BusinessRules.Registry;
+    using Services.BusinessRules.Registry.Interfaces;
+    using Services.Comments;
+    using Services.Common;
+    using Services.Files;
+    using Services.Posts;
+    using Services.Posts.Reactions;
+    using Services.Posts.Sentiment;
+    using Services.Scoring;
+    using Services.UoW;
+    using Services.Validation;
+    using Validation.Dto.Post;
 
     public class Startup
     {
@@ -67,8 +63,8 @@
 
             services.AddOptions();
                         services.Configure<AtanetSettings>(this.Configuration.GetSection("AtanetSettings"));
-            services.AddSingleton<IConfiguration>(this.Configuration);
-            services.AddSingleton<AtanetSettings>(x => x.GetService<IOptions<AtanetSettings>>().Value);
+            services.AddSingleton(this.Configuration);
+            services.AddSingleton(x => x.GetService<IOptions<AtanetSettings>>().Value);
             services.AddSingleton<IApiResultService, ApiResultService>();
 
             services.AddCors(x => x.AddDefaultPolicy(builder => builder
@@ -125,6 +121,7 @@
             services.AddScoped<IQueryService, QueryService>();
             services.AddScoped<IScoreService, ScoreService>();
             services.AddScoped<IPostReactionCreationService, PostReactionCreationService>();
+            services.AddScoped<ISentimentService, SentimentService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IAssemblyContainer>(x => new AssemblyContainer(this.GetAssemblies()));
             services.AddSingleton<IPagingValidator, PagingValidator>();

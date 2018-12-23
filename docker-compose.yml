@@ -55,6 +55,7 @@ services:
       - ./.env
     ports:
       - 9003:9003
+    command: ["python", "-m", "atanet", "serve"]
     networks:
       - default
 

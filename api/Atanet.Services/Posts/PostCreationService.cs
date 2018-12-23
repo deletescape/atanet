@@ -14,6 +14,7 @@
     using Atanet.Services.Scoring;
     using Atanet.Services.ApiResult;
     using AutoMapper;
+    using Sentiment;
 
     public class PostCreationService : IPostCreationService
     {
@@ -29,13 +30,16 @@
 
         private readonly IMapper mapper;
 
+        private readonly ISentimentService sentimentService;
+
         public PostCreationService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IFileCreationService fileCreationService,
             IUserService userService,
             IScoreService scoreService,
             IApiResultService apiResultService,
-            IMapper mapper)
+            IMapper mapper,
+            ISentimentService sentimentService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.fileCreationService = fileCreationService;
@@ -43,6 +47,7 @@
             this.scoreService = scoreService;
             this.apiResultService = apiResultService;
             this.mapper = mapper;
+            this.sentimentService = sentimentService;
         }
 
         public long CreatePost(CreatePostDto createPostDto)
@@ -61,8 +66,7 @@
                 var picture = this.fileCreationService.CreateImageFile(unitOfWork, createPostDto.Picture);
                 post.Picture = picture;
                 post.UserId = currentUserId;
-                // post.Sentiment = TODO: sentiment analysis
-                post.Sentiment = 0.5f;
+                post.Sentiment = this.sentimentService.GetSentiment(createPostDto.Text);
                 repository.Create(post);
                 unitOfWork.Save();
                 return post.Id;

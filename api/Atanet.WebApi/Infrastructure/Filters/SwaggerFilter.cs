@@ -1,9 +1,9 @@
 ﻿namespace Atanet.WebApi.Infrastructure.Filters
 {
+    using System.Linq;
     using Microsoft.AspNetCore.Http;
     using Swashbuckle.Swagger.Model;
     using Swashbuckle.SwaggerGen.Generator;
-    using System.Linq;
 
     public class SwaggerFilter : IOperationFilter
     {

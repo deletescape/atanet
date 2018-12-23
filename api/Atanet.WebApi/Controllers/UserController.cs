@@ -1,10 +1,10 @@
 namespace Atanet.WebApi.Controllers
 {
-    using Atanet.Services.ApiResult;
-    using Atanet.Services.Authentication;
-    using Atanet.Services.Scoring;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Services.ApiResult;
+    using Services.Authentication;
+    using Services.Scoring;
 
     [Route("api/users")]
     public class UserController : Controller

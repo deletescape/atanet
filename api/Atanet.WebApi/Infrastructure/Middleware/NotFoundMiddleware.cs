@@ -1,14 +1,13 @@
 ﻿namespace Atanet.WebApi.Infrastructure.Middleware
 {
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
+    using Model.Validation;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using Atanet.Model.Validation;
-    using Atanet.Services;
-    using Atanet.Services.ApiResult;
-    using System.Threading.Tasks;
+    using Services.ApiResult;
 
     public class NotFoundMiddleware
     {
@@ -34,7 +33,6 @@
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
                     });
                 await context.Response.WriteAsync(json);
-                return;
             }
         }
     }
