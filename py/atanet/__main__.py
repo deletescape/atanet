@@ -4,7 +4,6 @@ from atanet.sentiment.model import LanguageModel
 from atanet.sentiment.datasets.english_twitter import EnglishTwitterDataset
 from atanet.sentiment.datasets.simplified_chinese import SimplifiedChineseDataset
 from atanet.sentiment.language.language import Language
-from atanet.api.model_server import run
 
 
 def maybe_download_nltk_dependencies():
@@ -30,6 +29,7 @@ if __name__ == '__main__':
             model.save()
 
     elif args.command == 'serve':
+        from atanet.api.model_server import run
         run()
     else:
         raise ValueError('Invalid command line option')
