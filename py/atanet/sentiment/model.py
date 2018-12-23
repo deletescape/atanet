@@ -2,8 +2,13 @@ import tensorflow as tf
 from tensorflow import keras
 import pickle
 import json
+import os
+import tempfile
 from atanet.sentiment.language.language import Language, language_to_string
 from atanet.sentiment.datasets.set import SentimentDataset
+
+
+MAX_CHUNK_SIZE = 75000000
 
 
 class LanguageModel:
@@ -44,6 +49,24 @@ class LanguageModel:
 
     def save(self):
         self._model.save(self.get_model_name())
+        with open(self.get_model_name(), 'rb') as f:
+            i = 0
+            while True:
+                with open(self.get_model_name(i), 'wb') as in_f:
+                    written = 0
+                    while written < MAX_CHUNK_SIZE:
+                        read_length = 1024
+                        read = f.read(read_length)
+                        if not read:
+                            break
+                        in_f.write(read)
+                        written += read_length
+                    else:
+                        i += 1
+                        continue
+                    break
+
+        os.remove(self.get_model_name())     
         with open(self.get_tokenizer_name(), 'wb') as f:
             pickle.dump(self._tokenizer, f, protocol=pickle.HIGHEST_PROTOCOL)
         with open(self.get_metadata_name(), 'w') as f:
@@ -53,7 +76,19 @@ class LanguageModel:
 
 
     def load(self):
-        self._model = keras.models.load_model(self.get_model_name())
+        _, temp = tempfile.mkstemp()
+        with open(temp, 'wb') as f:
+            i = 0
+            while os.path.exists(self.get_model_name(i)):
+                with open(self.get_model_name(i), 'rb') as in_f:
+                    while True:
+                        data = in_f.read(1024)
+                        if not data:
+                            break
+                        f.write(data)
+                i += 1
+
+        self._model = keras.models.load_model(temp)
         with open(self.get_tokenizer_name(), 'rb') as f:
             self._tokenizer = pickle.load(f)
         with open(self.get_metadata_name(), 'r') as f:
@@ -67,8 +102,8 @@ class LanguageModel:
         return self._model.predict(to_predict)
 
 
-    def get_model_name(self):
-        return f'./trained_{self._name}.hdf5'
+    def get_model_name(self, number = ''):
+        return f'./trained_{self._name}{number}.hdf5'
 
 
     def get_tokenizer_name(self):

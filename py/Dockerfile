@@ -8,6 +8,4 @@ RUN rm -f Pipfile.lock && \
     pipenv run python -m pip uninstall --yes tensorflow-gpu && \
     pipenv run python -m pip install tensorflow
 
-RUN pipenv run python -m atanet train
-
 CMD ["pipenv", "run", "python", "-m", "atanet", "serve"]
