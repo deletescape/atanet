@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AtanetHttpService } from './atanet-http.service';
 import { CreatePost } from '../model';
 import { CreatedResult } from '../model/created-result.model';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class CreatePostService {

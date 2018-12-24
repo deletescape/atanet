@@ -15,6 +15,7 @@
     using System.Linq;
     using Atanet.Services.Scoring;
     using AutoMapper;
+    using Atanet.Services.ApiResult;
 
     public class PostFilterService : IPostFilterService
     {
@@ -28,18 +29,35 @@
 
         private readonly IMapper mapper;
 
+        private readonly IApiResultService apiResultService;
+
         public PostFilterService(
             IQueryService queryService,
             IPagingValidator pagingValidator,
             ICommentFilterService commentFilterService,
             IScoreService scoreService,
-            IMapper mapper)
+            IMapper mapper,
+            IApiResultService apiResultService)
         {
             this.queryService = queryService;
             this.pagingValidator = pagingValidator;
             this.commentFilterService = commentFilterService;
             this.scoreService = scoreService;
             this.mapper = mapper;
+            this.apiResultService = apiResultService;
+        }
+
+        public File GetPictureForPost(long postId)
+        {
+            if (!this.queryService.Query<Post>().Any(x => x.Id == postId))
+            {
+                throw new ApiException(this.apiResultService.NotFoundResult(AtanetEntityName.Post, postId));
+            }
+
+            return this.queryService.Query<Post>()
+                .Include(x => x.Picture)
+                .First(x => x.Id == postId)
+                .Picture;
         }
 
         public IList<PostDto> FilterPosts(int page, int pageSize, int commentCount)
@@ -76,7 +94,7 @@
                             Email = x.User.Email,
                             Id = x.UserId
                         }
-                    }).ToArray()
+                    }).OrderByDescending(x => x.Created).Take(commentCount).ToArray()
                 };
             return results.ToList();
         }

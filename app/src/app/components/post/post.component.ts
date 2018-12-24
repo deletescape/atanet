@@ -1,9 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { Post } from '../../model';
-import {
-  SnackbarService,
-  AtanetHttpService
-} from '../../services';
+import { Post, Request } from '../../model';
+import { ConfigService } from '../../config';
+import { PostReactionService } from '../../services';
 
 @Component({
   selector: 'app-post',
@@ -17,8 +15,12 @@ export class PostComponent {
   private _index: number;
 
   constructor(
-    private httpService: AtanetHttpService,
-    private snackbarService: SnackbarService) {
+    private configService: ConfigService,
+    private postReactionService: PostReactionService) {
+  }
+
+  public get pictureUrl(): string {
+    return this.configService.config.baseUrl + `posts/${this._internalPost.id}/picture`;
   }
 
   @Input()
@@ -28,10 +30,13 @@ export class PostComponent {
 
   @Input()
   public set index(value: number) {
-    this._index = value;
   }
 
   public get post(): Post {
     return this._internalPost;
+  }
+
+  public async addReaction(state: number): Promise<void> {
+    const creationResult = await this.postReactionService.addReaction(this._internalPost.id, state);
   }
 }

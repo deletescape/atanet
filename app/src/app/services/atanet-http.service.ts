@@ -8,6 +8,8 @@ import { BadRequest } from '../model';
 import { ConfigService } from '../config';
 import { AuthService } from 'angular-6-social-login';
 import { Observable } from 'rxjs';
+import { Reaction } from '../model/reaction.model';
+import { User } from '../model/user.model';
 
 declare type ConstructorType = { new(): any };
 
@@ -139,15 +141,20 @@ export class AtanetHttpService {
   }
 
   private registerAdapters(): void {
-    // this.propertyAdapters.push({
-    //   propertyName: 'comments',
-    //   constructor: Comment,
-    //   isArray: true
-    // });
-    // this.propertyAdapters.push({
-    //   propertyName: 'file',
-    //   constructor: File,
-    //   isArray: false
-    // });
+    this.propertyAdapters.push({
+      propertyName: 'comments',
+      constructor: Comment,
+      isArray: true
+    });
+    this.propertyAdapters.push({
+      propertyName: 'reactions',
+      constructor: Reaction,
+      isArray: false
+    });
+    this.propertyAdapters.push({
+      propertyName: 'user',
+      constructor: User,
+      isArray: false
+    });
   }
 }

@@ -26,6 +26,13 @@
             this.commentFilterService = commentFilterService;
         }
 
+        [HttpGet("{postId}/picture")]
+        public IActionResult PostPicture(long postId)
+        {
+            var file = this.postFilterService.GetPictureForPost(postId);
+            return File(file.Data, file.ContentType);
+        }
+
         [HttpGet]
         [Authorize]
         public IActionResult FilterPosts(PagedPostDto pagedPostDto)

@@ -32,8 +32,7 @@ export class AllPostsComponent {
   public createRequest(): PostContainerRequest {
     return new PostContainerRequest(
       (request: PostContainerRequest, page: number, pageSize: number, commentAmount: number) => {
-        return undefined;
-        // return request.filterPostService.filter(page, pageSize, commentAmount);
+        return request.filterPostService.getPosts(pageSize, page, commentAmount);
       }, {
       },
       this.filterPostService);

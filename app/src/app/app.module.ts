@@ -109,6 +109,7 @@ export function init(_boot: ConfigService) {
     },
     serv.CreatePostService,
     serv.FilterPostService,
+    serv.PostReactionService,
     serv.AtanetHttpService,
     {
       provide: ErrorHandler,
