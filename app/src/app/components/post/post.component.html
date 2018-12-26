@@ -1,15 +1,28 @@
 <div class="post-card">
-  <mat-card>
+  <mat-card class="mat-elevation-z10">
     <div>
-      <mat-card-title>
-          <img width="100%" [src]="pictureUrl | secure | async" />
-      </mat-card-title>
+      <img mat-card-image [src]="pictureUrl | secure | async">
       <mat-card-subtitle>
-        <button class="reaction-button" mat-stroked-button (click)="addReaction(-4)">{{post.reactions.StarStruck || 0}} 🤩</button>
-        <button class="reaction-button" mat-stroked-button (click)="addReaction(-2)">{{post.reactions.GrinningFace || 0}} 😀</button>
-        <button class="reaction-button" mat-stroked-button (click)="addReaction(2)">{{post.reactions.RaisedEyebrows || 0}} 🤨</button>
-        <button class="reaction-button" mat-stroked-button (click)="addReaction(4)">{{post.reactions.SymbolsOnMouth || 0}} 🤬</button>
-        {{post.created | date}}
+        <div class="post-metadata">
+          <app-user-item [user]="post.user"></app-user-item>
+          <div class="post-metadata-right">
+            <div>
+              <button class="reaction-button" mat-stroked-button (click)="addReaction(-4)">{{post.reactions.StarStruck
+                ||
+                0}} 🤩</button>
+              <button class="reaction-button" mat-stroked-button (click)="addReaction(-2)">{{post.reactions.GrinningFace
+                ||
+                0}} 😀</button>
+              <button class="reaction-button" mat-stroked-button (click)="addReaction(2)">{{post.reactions.RaisedEyebrows
+                || 0}} 🤨</button>
+              <button class="reaction-button" mat-stroked-button (click)="addReaction(4)">{{post.reactions.SymbolsOnMouth
+                || 0}} 🤬</button>
+            </div>
+            <div class="post-metadata-date">
+              <small>{{post.created | date: 'short'}}</small>
+            </div>
+          </div>
+        </div>
       </mat-card-subtitle>
     </div>
     <mat-card-content>

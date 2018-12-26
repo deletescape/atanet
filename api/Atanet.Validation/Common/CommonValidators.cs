@@ -83,12 +83,12 @@
                     PropertyName.Post.Id).Code)
                 .WithMessage("Page number must be non-negative");
             validator.RuleFor(x => x.PageSize)
-                .Must(x => x >= 5 && x <= 100)
+                .Must(x => x >= 3 && x <= 100)
                 .WithErrorCode(ErrorCode.Parse(
                     ErrorCodeType.OutOfRange,
                     AtanetEntityName.Post,
                     PropertyName.Post.Id).Code)
-                .WithMessage("Page size must be between 5 and 100 items");
+                .WithMessage("Page size must be between 3 and 100 items");
         }
     }
 }

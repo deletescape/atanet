@@ -67,7 +67,7 @@ export class CreatePostComponent implements OnInit {
       const createPost = await this.createCreatePostModel(this.getFile());
       const result = await this.createPostService.createPost(createPost);
       if (result.success) {
-        this.dialogRef.close(result);
+        this.dialogRef.close(result.createdId);
       }
     } finally {
       this.isLoading = false;

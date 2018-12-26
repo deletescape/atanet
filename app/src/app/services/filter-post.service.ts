@@ -14,7 +14,7 @@ export class FilterPostService {
     }
 
     if (comments) {
-      uri += `&comments=${page}`;
+      uri += `&comments=${comments}`;
     }
 
     const result = await this.httpService.getArray<Post>(uri, Post);

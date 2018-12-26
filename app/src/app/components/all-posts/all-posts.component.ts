@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PostContainerComponent } from '../post-container';
-import { FilterPostService } from '../../services/filter-post.service';
+import { FilterPostService, EventsService } from '../../services';
 import { PostContainerRequest } from '../../model';
 
 @Component({
@@ -8,12 +8,12 @@ import { PostContainerRequest } from '../../model';
   templateUrl: './all-posts.component.html',
   styleUrls: ['./all-posts.component.scss']
 })
-export class AllPostsComponent {
+export class AllPostsComponent implements OnInit {
   private _isActive = false;
   private _fetchRequest: PostContainerRequest;
   @ViewChild('postContainer') public postContainer: PostContainerComponent;
 
-  constructor(private filterPostService: FilterPostService) {
+  constructor(private filterPostService: FilterPostService, private eventsService: EventsService) {
     this._fetchRequest = this.createRequest();
   }
 
@@ -27,6 +27,12 @@ export class AllPostsComponent {
 
   public get fetchRequest(): PostContainerRequest {
     return this._fetchRequest;
+  }
+
+  public ngOnInit(): void {
+    this.eventsService.refresh.subscribe(() => {
+      this.refresh();
+    });
   }
 
   public createRequest(): PostContainerRequest {

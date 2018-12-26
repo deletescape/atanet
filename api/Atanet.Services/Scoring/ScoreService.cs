@@ -27,7 +27,7 @@ namespace Atanet.Services.Scoring
 
         private readonly IApiResultService apiResultService;
 
-        private readonly long PostConstant = 10;
+        private readonly long PostConstant = 20;
 
         public ScoreService(IQueryService queryService, IApiResultService apiResultService)
         {
@@ -71,7 +71,7 @@ namespace Atanet.Services.Scoring
         public bool Can(AtanetAction action, long userId)
         {
             var score = this.CalculateUserScore(userId);
-            var minScoreForAction = this.minScoresMap[action];
+            var minScoreForAction = this.GetMinScore(action);
             return score > minScoreForAction;
         }
 
@@ -83,7 +83,7 @@ namespace Atanet.Services.Scoring
             var score = this.CalculateUserScore(userId);
             foreach (var entry in this.minScoresMap)
             {
-                if (entry.Value > score)
+                if (entry.Value <= score)
                 {
                     yield return entry.Key;
                 }

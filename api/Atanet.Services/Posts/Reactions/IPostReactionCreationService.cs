@@ -1,9 +1,11 @@
 namespace Atanet.Services.Posts.Reactions
 {
+    using System.Collections.Generic;
+    using Atanet.Model.Data;
     using Atanet.Model.Dto;
 
     public interface IPostReactionCreationService
     {
-        long AddReaction(long postId, CreateReactionDto createReactionDto);
+        IDictionary<ReactionState, int> AddReaction(long postId, CreateReactionDto createReactionDto);
     }
 }

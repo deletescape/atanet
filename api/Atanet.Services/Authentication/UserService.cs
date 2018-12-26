@@ -70,17 +70,17 @@ namespace Atanet.Services.Authentication
         public void DeleteUser(long userId)
         {
             var currentUserId = this.GetCurrentUserId();
+            if (!this.scoreService.Can(AtanetAction.DeleteLowScoreUser, currentUserId))
+            {
+                var minScore = this.scoreService.GetMinScore(AtanetAction.DeleteLowScoreUser);
+                throw new ApiException(this.apiResultService.BadRequestResult($"You can only delete low score users, if you have a score greater than {minScore}"));
+            }
+
             if (currentUserId == userId)
             {
                 // Easter egg: update profile picture if user tries to delete himself
                 UpdateProfilePicture(currentUserId);
                 return;
-            }
-
-            if (!this.scoreService.Can(AtanetAction.DeleteLowScoreUser, currentUserId))
-            {
-                var minScore = this.scoreService.GetMinScore(AtanetAction.DeleteLowScoreUser);
-                throw new ApiException(this.apiResultService.BadRequestResult($"You can only delete low score users, if you have a score greater than {minScore}"));
             }
 
             if (!this.IsLowScoreUser(userId))

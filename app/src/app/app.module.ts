@@ -24,7 +24,8 @@ import {
   MatExpansionModule,
   MatGridListModule,
   MatListModule,
-  MatMenuModule
+  MatMenuModule,
+  MatBadgeModule
 } from '@angular/material';
 
 import * as comp from './components';
@@ -65,10 +66,13 @@ export function init(_boot: ConfigService) {
     comp.PostComponent,
     pipe.PrefixNumberPipe,
     pipe.SecurePipe,
+    pipe.AtanetActionPipe,
     comp.CommentsComponent,
     comp.FileDialogComponent,
     comp.LoginComponent,
-    comp.AtanetComponent
+    comp.AtanetComponent,
+    comp.UserItemComponent,
+    comp.UserDetailComponent
   ],
   imports: [
     CommonModule,
@@ -97,6 +101,8 @@ export function init(_boot: ConfigService) {
     MatListModule,
     MatMenuModule,
     SocialLoginModule,
+    MatMenuModule,
+    MatBadgeModule,
     routing
   ],
   providers: [
@@ -111,6 +117,8 @@ export function init(_boot: ConfigService) {
     serv.FilterPostService,
     serv.PostReactionService,
     serv.AtanetHttpService,
+    serv.EventsService,
+    serv.CommentHttpService,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler

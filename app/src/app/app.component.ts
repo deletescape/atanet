@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { CreatePostComponent } from './components';
 import { MatDialog } from '@angular/material';
 import { ConfigService } from './config';
-import { UserHttpService } from './services';
+import { UserHttpService, EventsService } from './services';
+import { ShowUserInfo } from './model/show-user-info.model';
 
 @Component({
   selector: 'app-root',
@@ -14,13 +15,15 @@ import { UserHttpService } from './services';
 export class AppComponent implements OnInit {
 
   public authState: SocialUser;
+  public userInfo: ShowUserInfo;
   public score: number = 0;
 
   constructor(private dialog: MatDialog,
               private authService: AuthService,
               private router: Router,
               private config: ConfigService,
-              private userHttpService: UserHttpService) {
+              private userHttpService: UserHttpService,
+              private eventsService: EventsService) {
   }
 
   public get pictureUrl(): string {
@@ -31,6 +34,10 @@ export class AppComponent implements OnInit {
     this.authService.signOut().then(() => {
       this.router.navigate(['/login']);
     });
+  }
+
+  public goToUserProfile(): void {
+    this.router.navigate(['user/' + this.userInfo.id]);
   }
 
   public createPost(): void {
@@ -45,14 +52,12 @@ export class AppComponent implements OnInit {
   }
 
   public async refresh(): Promise<void> {
+    this.eventsService.triggerRefresh();
   }
 
   public ngOnInit(): void {
     this.authService.authState.subscribe(authState => {
       this.authState = authState;
-      if (this.authState) {
-        this.router.navigate(['/']);
-      }
     });
     this.setScore();
     setInterval(() => {
@@ -61,6 +66,7 @@ export class AppComponent implements OnInit {
   }
 
   private setScore(): void {
+    this.userHttpService.getCurrentUserInfo().then(userInfo => this.userInfo = userInfo);
     this.userHttpService.getScore().then(score => this.score = score.score);
   }
 }

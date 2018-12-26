@@ -1,1 +1,31 @@
-comments
+<mat-list>
+    <h3 mat-subheader>Comments</h3>
+    <mat-divider *ngFor="let comment of comments"></mat-divider>
+    <div *ngFor="let comment of comments">
+        <div class="comment-list-item">
+            <div [routerLink]="['/user/' + comment.user.id]">
+                <img class="user-profile-img" [src]="getPictureUrl(comment.user.id) | secure | async" />
+            </div>
+            <div>
+                <p><strong>{{comment.user.email}}</strong> - {{comment.created | date: 'medium'}}</p>
+                <p>{{comment.text}}</p>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="comment-form">
+        <mat-form-field class="comment-input">
+            <input matInput placeholder="Comment..." [(ngModel)]="text">
+        </mat-form-field>
+        <button mat-icon-button (click)="addComment()" color="primary">
+            <mat-icon>send</mat-icon>
+        </button>
+        <button mat-icon-button (click)="refresh()" color="primary">
+            <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button (click)="loadPage()" color="primary">
+            <mat-icon>arrow_downward</mat-icon>
+        </button>
+    </div>
+</mat-list>

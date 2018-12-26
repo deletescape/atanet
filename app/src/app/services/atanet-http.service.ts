@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 
 import { SnackbarService } from './snackbar.service';
@@ -10,6 +10,7 @@ import { AuthService } from 'angular-6-social-login';
 import { Observable } from 'rxjs';
 import { Reaction } from '../model/reaction.model';
 import { User } from '../model/user.model';
+import { Comment } from '../model/comment.model';
 
 declare type ConstructorType = { new(): any };
 
@@ -26,6 +27,15 @@ export class AtanetHttpService {
 
   public get BaseUri(): string {
     return this.baseUri;
+  }
+
+  public async delete<T>(uri: string, type: { new(): T }): Promise<T> {
+    const combinedUri = this.baseUri + uri;
+    const resultObject = await this.handleRequest(
+      () => this.httpClient.delete(combinedUri),
+      type,
+      false);
+    return <T>resultObject;
   }
 
   public async get<T>(uri: string, type: { new(): T }): Promise<T> {

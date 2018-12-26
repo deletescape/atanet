@@ -1,0 +1,19 @@
+<div>
+  <mat-spinner class="spinner" *ngIf="!userInfo"></mat-spinner>
+  <mat-card class="user--card" *ngIf="userInfo">
+    <mat-card-content>
+      <div class="top-container">
+        <app-user-item [user]="userInfo"></app-user-item>
+        <button mat-raised-button (click)="delete()" color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <h3>Capabilities</h3>
+      <mat-chip-list>
+        <mat-chip *ngFor="let action of userInfo.capabilities">
+          {{ action | actionToString }}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-card-content>
+  </mat-card>
+</div>

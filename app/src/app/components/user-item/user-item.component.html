@@ -1,0 +1,14 @@
+<div class="user-container">
+  <div>
+    <img [routerLink]="['/user/' + userId]" class="user-profile-img" [src]="userPictureUrl | secure | async" />
+  </div>
+  <div>
+    <p class="right-text">
+      {{userEmail}}
+      <br />
+      <small class="custom-text">
+        {{userScore | number:'1.2-2'}} - joined {{joined | date}}
+      </small>
+    </p>
+  </div>
+</div>

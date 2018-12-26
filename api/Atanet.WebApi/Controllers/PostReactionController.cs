@@ -24,8 +24,8 @@ namespace Atanet.WebApi.Controllers
         [HttpPost("{postId}/reactions")]
         public IActionResult AddPostReaction(long postId, [FromBody] CreateReactionDto createReactionDto)
         {
-            var createdId = this.postReactionCreationService.AddReaction(postId, createReactionDto);
-            return this.apiResultService.Created(AtanetEntityName.Reaction, createdId);
+            var newReactionState = this.postReactionCreationService.AddReaction(postId, createReactionDto);
+            return this.apiResultService.Ok(newReactionState);
         }
     }
 }

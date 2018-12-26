@@ -6,3 +6,5 @@ export * from './comments';
 export * from './file-dialog';
 export * from './login';
 export * from './atanet';
+export * from './user-item';
+export * from './user-detail';

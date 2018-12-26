@@ -18,6 +18,11 @@ export class LoginComponent implements OnInit {
 
   public ngOnInit(): void {
     this.url = this.config.config.baseUrl + 'files/expression';
+    this.authService.authState.subscribe(authState => {
+      if (authState) {
+        this.router.navigate(['']);
+      }
+    })
   }
 
   public login(): void {

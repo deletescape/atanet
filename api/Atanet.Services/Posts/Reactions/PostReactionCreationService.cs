@@ -1,6 +1,7 @@
 namespace Atanet.Services.Posts.Reactions
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Atanet.Model.ApiResponse.HTTP400;
     using Atanet.Model.Data;
@@ -38,7 +39,7 @@ namespace Atanet.Services.Posts.Reactions
             this.scoreService = scoreService;
         }
 
-        public long AddReaction(long postId, CreateReactionDto createReactionDto)
+        public IDictionary<ReactionState, int> AddReaction(long postId, CreateReactionDto createReactionDto)
         {
             if (!this.queryService.Query<Post>().Any(x => x.Id == postId))
             {
@@ -52,28 +53,39 @@ namespace Atanet.Services.Posts.Reactions
                 throw new ApiException(this.apiResultService.BadRequestResult($"Must have a score greater than {minScore} in order to vote for posts"));
             }
 
-            if (this.queryService.Query<PostReaction>().Any(x => x.PostId == postId && x.UserId == currentUserId))
+            var postCreator = this.queryService.Query<Post>().Where(x => x.Id == postId).Select(x => x.UserId).Single();
+            if (postCreator == currentUserId)
             {
-                throw new ApiException(this.apiResultService.BadRequestResult((
-                    ErrorCode.Parse(ErrorCodeType.PropertyInvalidData, AtanetEntityName.Reaction, PropertyName.Reaction.Id),
-                    new ErrorDefinition(createReactionDto, "User has already voted on this post", PropertyName.Reaction.Id))));
+                throw new ApiException(this.apiResultService.BadRequestResult("You cannot react on a post you have authored"));
             }
 
             var state = this.GetReactionState(createReactionDto.ReactionState.Value);
-            var postReaction = new PostReaction
-            {
-                PostId = postId,
-                ReactionState = state,
-                UserId = currentUserId
-            };
             using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork())
             {
                 var postReactionRepository = unitOfWork.CreateEntityRepository<PostReaction>();
-                postReactionRepository.Create(postReaction);
+                var existing = postReactionRepository.Query().FirstOrDefault(x => x.PostId == postId && x.UserId == currentUserId);
+                if (existing == null)
+                {
+                    postReactionRepository.Create(new PostReaction
+                    {
+                        PostId = postId,
+                        ReactionState = state,
+                        UserId = currentUserId
+                    });
+                }
+                else
+                {
+                    existing.ReactionState = state;
+                    postReactionRepository.Update(existing);
+                }
+
                 unitOfWork.Save();
             }
 
-            return postReaction.Id;
+            var reactions = this.queryService.Query<PostReaction>().Where(x => x.PostId == postId)
+                .GroupBy(x => x.ReactionState).ToDictionary(x => x.Key, x => x.Count());
+
+            return reactions;
         }
 
         private ReactionState GetReactionState(int reactionState)

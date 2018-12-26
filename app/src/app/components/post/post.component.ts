@@ -10,9 +10,6 @@ import { PostReactionService } from '../../services';
 })
 export class PostComponent {
   private _internalPost: Post;
-  private _hasVoted = false;
-  private _address: string;
-  private _index: number;
 
   constructor(
     private configService: ConfigService,
@@ -36,7 +33,7 @@ export class PostComponent {
     return this._internalPost;
   }
 
-  public async addReaction(state: number): Promise<void> {
-    const creationResult = await this.postReactionService.addReaction(this._internalPost.id, state);
+  public addReaction(state: number): void {
+    this.postReactionService.addReaction(this._internalPost.id, state).then(reactionState => this._internalPost.reactions = reactionState);
   }
 }

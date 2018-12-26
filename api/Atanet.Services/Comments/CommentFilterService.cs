@@ -62,7 +62,18 @@
         {
             var fetched =
                 from comment in this.queryService.Query<Comment>().Include(x => x.User)
-                select this.mapper.Map<CommentDto>(comment);
+                select new CommentDto
+                {
+                    Created = comment.Created,
+                    Id = comment.Id,
+                    PostId = comment.PostId,
+                    Text = comment.Text,
+                    User = new UserDto
+                    {
+                        Email = comment.User.Email,
+                        Id = comment.UserId
+                    }
+                };
             return fetched;
         }
 

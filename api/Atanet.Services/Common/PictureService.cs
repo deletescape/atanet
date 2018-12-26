@@ -12,7 +12,10 @@ namespace Atanet.Services.Common
         private readonly IFileCreationService fileCreationService;
 
         private const string PictureSource = "https://atanet90.github.io/expression-pack/img/{0}.jpg";
+        
+        // TODO: change to 127 for PC mode
         private const int MaxImages = 88241;
+        
         private const int ImageSize = 128;
 
         private readonly Random random = new Random();
@@ -33,8 +36,9 @@ namespace Atanet.Services.Common
                 using (var image = new MagickImage(data))
                 {
                     image.Format = MagickFormat.Jpeg;
-
                     image.AdaptiveResize(ImageSize, ImageSize);
+                    image.Resize(ImageSize, ImageSize);
+                    image.Crop(ImageSize, ImageSize);
                     data = image.ToByteArray();
                     return this.fileCreationService.CreateImageFile(unitOfWork, data, fileName);
                 }

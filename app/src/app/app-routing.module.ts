@@ -1,6 +1,6 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent, AtanetComponent } from './components';
+import { LoginComponent, AtanetComponent, UserDetailComponent } from './components';
 
 const appRoutes: Routes = [
     {
@@ -10,6 +10,10 @@ const appRoutes: Routes = [
     {
         path: '',
         component: AtanetComponent
+    },
+    {
+        path: 'user/:id',
+        component: UserDetailComponent
     },
     {
         path: '**',

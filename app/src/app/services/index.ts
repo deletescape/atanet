@@ -4,3 +4,5 @@ export * from './snackbar.service';
 export * from './filter-post.service';
 export * from './user-http.service';
 export * from './post-reaction-http.service';
+export * from './comment-http.service';
+export * from './events.service';
