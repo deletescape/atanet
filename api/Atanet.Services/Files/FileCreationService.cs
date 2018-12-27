@@ -24,7 +24,10 @@
 
         private readonly IApiResultService apiResultService;
 
-        private const string WebPContentType = "image/webp";
+        private const string JpegContentType = "image/jpeg";
+
+        private const int MaxWidth = 1280;
+        private const int MaxHeight = 720;
 
         public FileCreationService(IQueryService queryService, IUnitOfWorkFactory unitOfWorkFactory, IApiResultService apiResultService)
         {
@@ -77,7 +80,7 @@
             var fileRepository = unitOfWork.CreateEntityRepository<File>();
             var file = new File
             {
-                ContentType = WebPContentType,
+                ContentType = JpegContentType,
                 FileName = fileName
             };
 
@@ -90,21 +93,26 @@
         {
             try
             {
-                var compressor = new ImageOptimizer();
-                stream.Position = 0;
-                var compressed = compressor.Compress(stream);
-                if (!compressed)
-                {
-                    throw new ApiException(this.apiResultService.BadRequestResult(
-                        (ErrorCode.Parse(ErrorCodeType.PropertyInvalidData, AtanetEntityName.File, PropertyName.File.Id),
-                        new ErrorDefinition(null, "File could not be compressed", PropertyName.File.Id))));
-                }
-
                 var compressedBytes = stream.ToArray();
                 using (var image = new MagickImage(compressedBytes))
                 {
-                    var imageOptimizer = new ImageOptimizer();
-                    return image.ToByteArray(MagickFormat.WebP);
+                    if (image.Width > MaxWidth)
+                    {
+                        image.Resize(MaxWidth, 0);
+                    }
+                    
+                    if (image.Height > MaxHeight)
+                    {
+                        image.Resize(0, MaxHeight);
+                    }
+
+                    var data = image.ToByteArray(MagickFormat.Jpeg);
+                    var memoryStream = new MemoryStream(data);
+                    var compressor = new ImageOptimizer();
+                    memoryStream.Position = 0;
+                    compressor.OptimalCompression = true;
+                    compressor.Compress(memoryStream);
+                    return memoryStream.ToArray();
                 }
             }
             catch (MagickCorruptImageErrorException)

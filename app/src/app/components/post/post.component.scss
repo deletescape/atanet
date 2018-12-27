@@ -3,6 +3,20 @@
     margin: 10px auto;
 }
 
+.image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    max-height: 500px;
+    width: auto;
+    max-width: 100%;
+    margin-top: 5px;
+}
+
 .reaction-button {
     margin: 5px 5px 0 5px;
     font-size: 25px;

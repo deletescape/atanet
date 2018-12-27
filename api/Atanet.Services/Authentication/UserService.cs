@@ -105,7 +105,7 @@ namespace Atanet.Services.Authentication
             }
 
             var currentUserId = this.GetCurrentUserId();
-            if (!this.scoreService.Can(AtanetAction.ViewUserProfile, currentUserId))
+            if (currentUserId != userId && !this.scoreService.Can(AtanetAction.ViewUserProfile, currentUserId))
             {
                 var minScore = this.scoreService.GetMinScore(AtanetAction.ViewUserProfile);
                 throw new ApiException(this.apiResultService.BadRequestResult($"User must have a score greater than {minScore} in order to view user profiles"));

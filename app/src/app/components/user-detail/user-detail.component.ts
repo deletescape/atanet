@@ -17,16 +17,19 @@ export class UserDetailComponent implements OnInit {
               private snackbarService: SnackbarService) { }
 
   public userInfo: ShowUserInfo;
+  public buttonDisabled: boolean = false;
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       const userId = <number>params['id'];
       this.userHttpService.getCurrentUserInfo().then(currentUser => {
-        if (currentUser.score < MinScore[AtanetAction.ViewOwnUserProfile] && currentUser.id === userId) {
+        console.log(currentUser.id);
+        console.log(userId);
+        if (currentUser.score < MinScore[AtanetAction.ViewOwnUserProfile] && currentUser.id == userId) {
           this.snackbarService.showMessage('You cannot view your own user profile');
           this.router.navigate(['']);
           return;
-        } else if (currentUser.score < MinScore[AtanetAction.ViewUserProfile]) {
+        } else if (currentUser.score < MinScore[AtanetAction.ViewUserProfile] && currentUser.id != userId) {
           this.snackbarService.showMessage('You cannot view any user profiles');
           this.router.navigate(['']);
           return;
@@ -39,8 +42,13 @@ export class UserDetailComponent implements OnInit {
   }
 
   public delete(): void {
+    this.buttonDisabled = true;
     this.userHttpService.deleteUser(this.userInfo.id).then(_ => {
+      this.buttonDisabled = false;
       this.router.navigate(['']);
+    }).catch(_ => {
+      this.buttonDisabled = false;
+      this.snackbarService.showMessage('Failed to delete user');
     });
   }
 

@@ -1,4 +1,4 @@
 {
-    "baseUrl": "http://localhost:9000/api/",
+    "baseUrl": "/api/",
     "clientId": "183413621231-odlcpmht4o9dnqj2v0rpgcm3a1h2dd0e.apps.googleusercontent.com"
 }

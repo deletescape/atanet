@@ -36,12 +36,14 @@ namespace Atanet.Services.Common
                 using (var image = new MagickImage(data))
                 {
                     image.Format = MagickFormat.Jpeg;
-                    image.AdaptiveResize(ImageSize, ImageSize);
-                    image.Resize(ImageSize, ImageSize);
-                    image.Crop(ImageSize, ImageSize);
+                    var geometry = new MagickGeometry($"{ImageSize}x");
+                    geometry.IgnoreAspectRatio = true;
+                    image.AdaptiveResize(geometry);
+                    image.Extent(ImageSize, ImageSize, Gravity.Center, MagickColor.FromRgb(255, 255, 255));
                     data = image.ToByteArray();
-                    return this.fileCreationService.CreateImageFile(unitOfWork, data, fileName);
                 }
+
+                return this.fileCreationService.CreateImageFile(unitOfWork, data, fileName);
             }
         }
 

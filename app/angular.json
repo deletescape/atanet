@@ -23,7 +23,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/medium-zoom/dist/medium-zoom.min.js"
+            ]
           },
           "configurations": {
             "production": {

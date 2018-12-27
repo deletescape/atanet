@@ -19,6 +19,7 @@ services:
     container_name: atanet-db
     image: mysql:5.7
     restart: always
+    command: --max_allowed_packet=32505856
     volumes:
       - atanet-volume:/var/lib/mysql
     restart: always

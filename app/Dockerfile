@@ -10,7 +10,6 @@ FROM alpine:3.8
 
 RUN apk add --update --no-cache \
 	lighttpd \
-  gettext \
   && rm -rf /var/cache/apk/*
 
 RUN mkdir /var/www/atanet

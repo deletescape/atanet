@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { Post, Request } from '../../model';
+import { Component, Input, AfterViewInit } from '@angular/core';
+import { Post } from '../../model';
 import { ConfigService } from '../../config';
 import { PostReactionService } from '../../services';
 
@@ -8,7 +8,7 @@ import { PostReactionService } from '../../services';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss']
 })
-export class PostComponent {
+export class PostComponent implements AfterViewInit {
   private _internalPost: Post;
 
   constructor(
@@ -31,6 +31,12 @@ export class PostComponent {
 
   public get post(): Post {
     return this._internalPost;
+  }
+
+  public ngAfterViewInit() {
+    // @ts-ignore
+    mediumZoom('#post-image-' + this.post.id, {
+    });
   }
 
   public addReaction(state: number): void {

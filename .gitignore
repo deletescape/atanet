@@ -268,3 +268,5 @@ dbpedia_data/
 
 
 py/atanet/sentiment/datasets/twitter_english.csv
+nginx/config/key.pem
+nginx/config/cert.pem

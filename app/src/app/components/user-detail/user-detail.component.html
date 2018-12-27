@@ -4,7 +4,7 @@
     <mat-card-content>
       <div class="top-container">
         <app-user-item [user]="userInfo"></app-user-item>
-        <button mat-raised-button (click)="delete()" color="warn">
+        <button mat-raised-button (click)="delete()" [disabled]="buttonDisabled" color="warn">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
