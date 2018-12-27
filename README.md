@@ -24,6 +24,9 @@ SENTIMENT_PORT=9003
 ASPNETCORE_URLS=http://localhost:9000
 ```
 
+Create certifictes:
+`openssl req -x509 -newkey rsa:4096 -nodes -out ./nginx/config/cert.pem -keyout ./nginx/config/key.pem -days 365`
+
 `docker-compose up`
 
 Connect to db:
