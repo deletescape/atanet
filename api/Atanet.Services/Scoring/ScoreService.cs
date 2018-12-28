@@ -29,6 +29,8 @@ namespace Atanet.Services.Scoring
 
         private readonly long PostConstant = 20;
 
+        private readonly int TopScoreboard = 10;
+
         public ScoreService(IQueryService queryService, IApiResultService apiResultService)
         {
             this.queryService = queryService;
@@ -63,7 +65,7 @@ namespace Atanet.Services.Scoring
             {
                 Email = x.User.Email,
                 Id = x.User.Id
-            }).ToList();
+            }).Take(TopScoreboard).ToList();
         }
 
         public IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation)
