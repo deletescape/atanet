@@ -72,7 +72,8 @@ export function init(_boot: ConfigService) {
     comp.LoginComponent,
     comp.AtanetComponent,
     comp.UserItemComponent,
-    comp.UserDetailComponent
+    comp.UserDetailComponent,
+    comp.ScoreboardComponent
   ],
   imports: [
     CommonModule,

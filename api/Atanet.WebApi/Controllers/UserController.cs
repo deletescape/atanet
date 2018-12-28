@@ -39,6 +39,14 @@ namespace Atanet.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("scoreboard")]
+        public IActionResult GetScoreBoard()
+        {
+            var result = this.scoreService.GetUsersSortedByScore();
+            return this.apiResultService.Ok(result);
+        }
+
+        [Authorize]
         [HttpGet("{userId}")]
         public IActionResult GetUser(long userId)
         {

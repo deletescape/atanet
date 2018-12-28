@@ -7,6 +7,8 @@ namespace Atanet.Services.Scoring
 
     public interface IScoreService
     {
+        IList<UserDto> GetUsersSortedByScore();
+
         double CalculateUserScore(long userId);
 
         IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation);

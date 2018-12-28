@@ -8,3 +8,4 @@ export * from './login';
 export * from './atanet';
 export * from './user-item';
 export * from './user-detail';
+export * from './scoreboard';

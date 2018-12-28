@@ -1,0 +1,14 @@
+<div class="score-card">
+  <mat-card class="mat-elevation-z10">
+    <mat-card-content>
+      <mat-list>
+        <h3 mat-subheader>Scoreboard</h3>
+        <mat-list-item *ngFor="let user of users; let i = index">
+          <p class="index">{{i + 1}}.</p>
+          <app-user-item [user]="user">
+          </app-user-item>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>

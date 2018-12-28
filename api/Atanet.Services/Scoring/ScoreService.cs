@@ -49,6 +49,23 @@ namespace Atanet.Services.Scoring
             return postsForUser.Sum(x => x.Score) + difference;
         }
 
+        public IList<UserDto> GetUsersSortedByScore()
+        {
+            var posts = this.GetEnrichedPosts(withTimeInCalculation: false);
+            var usersWithScore =
+                from user in this.queryService.Query<User>()
+                select new
+                {
+                    User = user,
+                    Score = posts.Where(x => x.Post.UserId == user.Id).Sum(x => x.Score) + (DateTime.Now - user.Created).TotalDays
+                };
+            return usersWithScore.OrderByDescending(x => x.Score).Select(x => new UserDto
+            {
+                Email = x.User.Email,
+                Id = x.User.Id
+            }).ToList();
+        }
+
         public IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation)
         {
             var enrichedPosts =
