@@ -31,9 +31,10 @@ export class AppComponent implements OnInit {
   }
 
   public logout(): void {
-    this.authService.signOut().then(() => {
+    const res = () => {
       this.router.navigate(['/login']);
-    });
+    };
+    this.authService.signOut().then(res).catch(res);
   }
 
   public goToUserProfile(): void {

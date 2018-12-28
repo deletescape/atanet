@@ -23,8 +23,6 @@ export class UserDetailComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       const userId = <number>params['id'];
       this.userHttpService.getCurrentUserInfo().then(currentUser => {
-        console.log(currentUser.id);
-        console.log(userId);
         if (currentUser.score < MinScore[AtanetAction.ViewOwnUserProfile] && currentUser.id == userId) {
           this.snackbarService.showMessage('You cannot view your own user profile');
           this.router.navigate(['']);

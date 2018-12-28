@@ -1,8 +1,8 @@
 <mat-toolbar color="primary">
-    <div class="icon">
+    <div class="icon" [routerLink]="['']">
         <img src="/assets/logo.png" alt="atanet" height="42" width="42">
     </div>
-    <span [routerLink]="['']">a * tan(et)</span>
+    <span>a * tan(et)</span>
     <span class="fill-remaining-space"></span>
     <div *ngIf="authState">
         <button mat-icon-button *ngIf="authState" (click)="refresh()">

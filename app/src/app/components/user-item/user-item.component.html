@@ -1,9 +1,9 @@
 <div class="user-container">
-  <div>
-    <img [routerLink]="['/user/' + userId]" class="user-profile-img" [src]="userPictureUrl | secure | async" />
+  <div class="user-profile-img">
+    <img [id]="id" [src]="userPictureUrl | secure | async" />
   </div>
   <div>
-    <p class="right-text">
+    <p class="right-text" [routerLink]="['/user/' + userId]">
       {{userEmail}}
       <br />
       <small class="custom-text">
