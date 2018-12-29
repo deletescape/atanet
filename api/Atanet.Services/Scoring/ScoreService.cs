@@ -97,20 +97,17 @@ namespace Atanet.Services.Scoring
         private IQueryable<UserWithScoreDto> GetUsersByScoreQuery()
         {
             var posts = this.GetEnrichedPosts(withTimeInCalculation: false);
-            var usersWithScore =
+            var result =
                 from user in this.queryService.Query<User>()
-                select new
+                join post in posts on user.Id equals post.Post.UserId into userPosts
+                select new UserWithScoreDto
                 {
-                    User = user,
-                    Score = posts.Where(x => x.Post.UserId == user.Id).Sum(x => x.Score) + (DateTime.Now - user.Created).TotalDays
+                    Created = user.Created,
+                    Email = user.Email,
+                    Id = user.Id,
+                    Score = userPosts.Sum(x => x.Score) + (DateTime.Now - user.Created).TotalDays
                 };
-            return usersWithScore.OrderByDescending(x => x.Score).Select(x => new UserWithScoreDto
-            {
-                Email = x.User.Email,
-                Id = x.User.Id,
-                Created = x.User.Created,
-                Score = x.Score
-            });
+            return result;
         }
     }
 }

@@ -8,7 +8,10 @@ import { UserWithScore } from '../model/user-with-score.model';
 @Injectable()
 export class UserHttpService {
 
+  private userInfoCache = {};
+
   constructor(private readonly httpService: AtanetHttpService) {
+    setTimeout(() => this.userInfoCache = {}, 10000);
   }
 
   public async getCurrentUserInfo(): Promise<ShowUserInfo> {
@@ -16,9 +19,14 @@ export class UserHttpService {
     return await this.httpService.get(uri, ShowUserInfo);
   }
 
-  public async getUserInfo(userId?: number): Promise<ShowUserInfo> {
-    const uri = `users/${userId || ''}`;
+  public async getUserInfo(userId: number): Promise<ShowUserInfo> {
+    if (userId in this.userInfoCache) {
+      return this.userInfoCache[userId];
+    }
+
+    const uri = `users/${userId}`;
     const result = await this.httpService.get(uri, ShowUserInfo);
+    this.userInfoCache[userId] = result;
     return result;
   }
 

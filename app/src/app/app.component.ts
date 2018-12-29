@@ -67,7 +67,11 @@ export class AppComponent implements OnInit {
   }
 
   private setScore(): void {
-    this.userHttpService.getCurrentUserInfo().then(userInfo => this.userInfo = userInfo);
-    this.userHttpService.getScore().then(score => this.score = score.score);
+    this.userHttpService.getCurrentUserInfo().then(userInfo => {
+      this.userInfo = userInfo;
+      this.score = userInfo.score;
+    }).catch(() => {
+      this.userHttpService.getScore().then(score => this.score = score.score);
+    });
   }
 }

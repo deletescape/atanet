@@ -2,7 +2,7 @@ import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { User } from '../../model/user.model';
 import { ConfigService } from '../../config';
 import { UserHttpService } from '../../services';
-import { UserWithScore } from 'src/app/model/user-with-score.model';
+import { UserWithScore } from '../../model/user-with-score.model';
 
 @Component({
   selector: 'app-user-item',
@@ -16,6 +16,8 @@ export class UserItemComponent implements OnInit, AfterViewInit {
   private _joined: Date | undefined = undefined;
   private readonly _id: string;
 
+  private _hasFullInfo: boolean | undefined = undefined;
+
   constructor(private configService: ConfigService, private userHttpService: UserHttpService) {
     this._id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 36);
   }
@@ -23,6 +25,7 @@ export class UserItemComponent implements OnInit, AfterViewInit {
   @Input()
   public set user(userInfo: User) {
     this._userInfo = userInfo;
+    this._hasFullInfo = false;
   }
 
   @Input()
@@ -31,7 +34,8 @@ export class UserItemComponent implements OnInit, AfterViewInit {
     this._userInfo.email = userWithScore.email;
     this._userInfo.id = userWithScore.id;
     this._joined = userWithScore.created;
-    this._score = userWithScore.score; 
+    this._score = userWithScore.score;
+    this._hasFullInfo = true;
   }
 
   public get id(): string {
@@ -65,7 +69,7 @@ export class UserItemComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    if (!this._score || !this._joined) {
+    if (this._hasFullInfo) {
       return;
     }
   
