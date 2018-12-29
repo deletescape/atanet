@@ -39,7 +39,7 @@ namespace Atanet.Services.Scoring
 
         public double CalculateUserScore(long userId)
         {
-            var userDto = this.GetUsersSortedByScore().FirstOrDefault(x => x.Id == userId);
+            var userDto = this.GetUsersByScoreQuery().FirstOrDefault(x => x.Id == userId);
             if (userDto == null)
             {
                 throw new ApiException(this.apiResultService.NotFoundResult(AtanetEntityName.User, userId));
@@ -50,7 +50,9 @@ namespace Atanet.Services.Scoring
 
         public IList<UserWithScoreDto> GetUsersSortedByScore()
         {
-            return this.GetUsersByScoreQuery().Take(TopScoreboard).ToList();
+            return this.GetUsersByScoreQuery()
+                .OrderByDescending(x => x.Score)
+                .Take(TopScoreboard).ToList();
         }
 
         public IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation)
