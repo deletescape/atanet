@@ -2,6 +2,7 @@ import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { User } from '../../model/user.model';
 import { ConfigService } from '../../config';
 import { UserHttpService } from '../../services';
+import { UserWithScore } from 'src/app/model/user-with-score.model';
 
 @Component({
   selector: 'app-user-item',
@@ -11,8 +12,8 @@ import { UserHttpService } from '../../services';
 export class UserItemComponent implements OnInit, AfterViewInit {
 
   private _userInfo: User;
-  private _score: number = 0;
-  private _joined: Date;
+  private _score: number | undefined = undefined;
+  private _joined: Date | undefined = undefined;
   private readonly _id: string;
 
   constructor(private configService: ConfigService, private userHttpService: UserHttpService) {
@@ -22,6 +23,15 @@ export class UserItemComponent implements OnInit, AfterViewInit {
   @Input()
   public set user(userInfo: User) {
     this._userInfo = userInfo;
+  }
+
+  @Input()
+  public set fullUser(userWithScore: UserWithScore) {
+    this._userInfo = new User();
+    this._userInfo.email = userWithScore.email;
+    this._userInfo.id = userWithScore.id;
+    this._joined = userWithScore.created;
+    this._score = userWithScore.score; 
   }
 
   public get id(): string {
@@ -55,6 +65,10 @@ export class UserItemComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    if (!this._score || !this._joined) {
+      return;
+    }
+  
     this.userHttpService.getUserInfo(this._userInfo.id).then(user => {
       this._score = user.score;
       this._joined = user.created;

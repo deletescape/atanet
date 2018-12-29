@@ -39,33 +39,18 @@ namespace Atanet.Services.Scoring
 
         public double CalculateUserScore(long userId)
         {
-            var userCreationDate = this.queryService.Query<User>().Where(x => x.Id == userId).Select(x => x.Created).FirstOrDefault();
-            if (userCreationDate == default(DateTime))
+            var userDto = this.GetUsersSortedByScore().FirstOrDefault(x => x.Id == userId);
+            if (userDto == null)
             {
                 throw new ApiException(this.apiResultService.NotFoundResult(AtanetEntityName.User, userId));
             }
 
-            var difference = (DateTime.Now - userCreationDate).TotalDays;
-            var postsForUser = this.GetEnrichedPosts(withTimeInCalculation: false)
-                .Where(x => x.Post.UserId == userId);
-            return postsForUser.Sum(x => x.Score) + difference;
+            return userDto.Score;
         }
 
-        public IList<UserDto> GetUsersSortedByScore()
+        public IList<UserWithScoreDto> GetUsersSortedByScore()
         {
-            var posts = this.GetEnrichedPosts(withTimeInCalculation: false);
-            var usersWithScore =
-                from user in this.queryService.Query<User>()
-                select new
-                {
-                    User = user,
-                    Score = posts.Where(x => x.Post.UserId == user.Id).Sum(x => x.Score) + (DateTime.Now - user.Created).TotalDays
-                };
-            return usersWithScore.OrderByDescending(x => x.Score).Select(x => new UserDto
-            {
-                Email = x.User.Email,
-                Id = x.User.Id
-            }).Take(TopScoreboard).ToList();
+            return this.GetUsersByScoreQuery().Take(TopScoreboard).ToList();
         }
 
         public IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation)
@@ -107,6 +92,25 @@ namespace Atanet.Services.Scoring
                     yield return entry.Key;
                 }
             }
+        }
+
+        private IQueryable<UserWithScoreDto> GetUsersByScoreQuery()
+        {
+            var posts = this.GetEnrichedPosts(withTimeInCalculation: false);
+            var usersWithScore =
+                from user in this.queryService.Query<User>()
+                select new
+                {
+                    User = user,
+                    Score = posts.Where(x => x.Post.UserId == user.Id).Sum(x => x.Score) + (DateTime.Now - user.Created).TotalDays
+                };
+            return usersWithScore.OrderByDescending(x => x.Score).Select(x => new UserWithScoreDto
+            {
+                Email = x.User.Email,
+                Id = x.User.Id,
+                Created = x.User.Created,
+                Score = x.Score
+            });
         }
     }
 }

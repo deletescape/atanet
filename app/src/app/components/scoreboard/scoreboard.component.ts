@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserHttpService } from '../../services';
-import { User } from '../../model/user.model';
+import { UserWithScore } from '../../model/user-with-score.model';
 
 @Component({
   selector: 'app-scoreboard',
@@ -11,11 +11,11 @@ export class ScoreboardComponent implements OnInit {
 
   constructor(private userService: UserHttpService) { }
 
-  public users: User[] = [];
+  public users: UserWithScore[] = [];
 
   public ngOnInit(): void {
     this.load();
-    setInterval(() => this.load(), 10000);
+    setInterval(() => this.load(), 60000);
   }
 
   public load(): void {

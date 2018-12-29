@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
     this.setScore();
     setInterval(() => {
       this.setScore();
-    }, 5000);
+    }, 10000);
   }
 
   private setScore(): void {

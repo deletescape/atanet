@@ -3,7 +3,7 @@ import { AtanetHttpService } from './atanet-http.service';
 import { Score } from '../model/score.model';
 import { ShowUserInfo } from '../model/show-user-info.model';
 import { Request } from '../model';
-import { User } from '../model/user.model';
+import { UserWithScore } from '../model/user-with-score.model';
 
 @Injectable()
 export class UserHttpService {
@@ -33,8 +33,8 @@ export class UserHttpService {
     return result;
   }
 
-  public async getScoreboard(): Promise<User[]> {
+  public async getScoreboard(): Promise<UserWithScore[]> {
     const uri = 'users/scoreboard';
-    return await this.httpService.getArray(uri, User);
+    return await this.httpService.getArray(uri, UserWithScore);
   }
 }

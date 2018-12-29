@@ -5,7 +5,7 @@
         <h3 mat-subheader>Scoreboard</h3>
         <mat-list-item class="scoreboard-entry" *ngFor="let user of users; let i = index">
           <p class="index">{{i + 1}}.</p>
-          <app-user-item [user]="user">
+          <app-user-item [fullUser]="user">
           </app-user-item>
         </mat-list-item>
       </mat-list>

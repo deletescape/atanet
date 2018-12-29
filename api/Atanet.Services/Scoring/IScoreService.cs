@@ -7,7 +7,7 @@ namespace Atanet.Services.Scoring
 
     public interface IScoreService
     {
-        IList<UserDto> GetUsersSortedByScore();
+        IList<UserWithScoreDto> GetUsersSortedByScore();
 
         double CalculateUserScore(long userId);
 
