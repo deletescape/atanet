@@ -13,7 +13,6 @@ namespace Atanet.Services.Authentication
     using Atanet.Model.Dto;
     using AutoMapper;
     using Atanet.Services.Scoring;
-    using System;
 
     public class UserService : IUserService
     {
@@ -99,7 +98,7 @@ namespace Atanet.Services.Authentication
 
         public ShowUserDto GetUserInfo(long userId)
         {
-            var user = this.queryService.Query<User>().Include(x => x.Picture).FirstOrDefault(x => x.Id == userId);
+            var user = this.queryService.Query<User>().FirstOrDefault(x => x.Id == userId);
             if (user == null)
             {
                 throw new ApiException(this.apiResultService.NotFoundResult(AtanetEntityName.User, userId));
@@ -121,12 +120,6 @@ namespace Atanet.Services.Authentication
             var userDto = this.mapper.Map<ShowUserDto>(user);
             userDto.Capabilities = this.scoreService.GetUserCapabilities(userId).ToArray();
             userDto.Score = this.scoreService.CalculateUserScore(userId);
-            userDto.Picture = new PictureDto
-            {
-                Base64Data = Convert.ToBase64String(user.Picture.Data),
-                ContentType = user.Picture.ContentType
-            };
-
             return userDto;
         }
 

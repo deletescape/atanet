@@ -4,7 +4,7 @@
     <div *ngFor="let comment of comments">
         <div class="comment-list-item">
             <div>
-                <img [id]="id" class="user-profile-img" [src]="comment && comment.user.picture.imageSource(domSanitizer)" />
+                <img [id]="id" class="user-profile-img" [src]="getPictureUrl(comment.user.id) | secure | async" />
             </div>
             <div [routerLink]="['/user/' + comment.user.id]">
                 <p><strong>{{comment.user.email}}</strong> - {{comment.created | date: 'medium'}}</p>

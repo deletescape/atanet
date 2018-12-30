@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material';
 import { ConfigService } from './config';
 import { UserHttpService, EventsService } from './services';
 import { ShowUserInfo } from './model/show-user-info.model';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +18,7 @@ export class AppComponent implements OnInit {
   public userInfo: ShowUserInfo;
   public score: number = 0;
 
-  constructor(public domSanitizer: DomSanitizer,
-              private dialog: MatDialog,
+  constructor(private dialog: MatDialog,
               private authService: AuthService,
               private router: Router,
               private config: ConfigService,

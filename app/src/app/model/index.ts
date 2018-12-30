@@ -7,5 +7,3 @@ export * from './post.model';
 export * from './post-container-request.model';
 export * from './comment.model';
 export * from './actions.model';
-export * from './picture.model';
-export * from './user.model';

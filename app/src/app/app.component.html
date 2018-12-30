@@ -15,7 +15,7 @@
             <span class="score-text">{{score | number:'1.2-2'}}</span>
         </button>
         <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="authState">
-            <img class="user-picture" width="100%" [src]="userInfo && userInfo.picture.imageSource(domSanitizer)" />
+            <img class="user-picture" width="100%" [src]="pictureUrl | secure | async" />
         </button>
         <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="goToUserProfile()">

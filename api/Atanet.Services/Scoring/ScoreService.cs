@@ -100,19 +100,14 @@ namespace Atanet.Services.Scoring
         {
             var posts = this.GetEnrichedPosts(withTimeInCalculation: false);
             var result =
-                from user in this.queryService.Query<User>().Include(x => x.Picture)
+                from user in this.queryService.Query<User>()
                 join post in posts on user.Id equals post.Post.UserId into userPosts
                 select new UserWithScoreDto
                 {
                     Created = user.Created,
                     Email = user.Email,
                     Id = user.Id,
-                    Score = userPosts.Sum(x => x.Score) + (DateTime.Now - user.Created).TotalDays,
-                    Picture = new PictureDto
-                    {
-                        Base64Data = Convert.ToBase64String(user.Picture.Data),
-                        ContentType = user.Picture.ContentType
-                    }
+                    Score = userPosts.Sum(x => x.Score) + (DateTime.Now - user.Created).TotalDays
                 };
             return result;
         }

@@ -14,8 +14,6 @@ namespace Atanet.Model.Dto
 
         public double Score { get; set; }
 
-        public PictureDto Picture { get; set; }
-
         public AtanetAction[] Capabilities { get; set; }
     }
 }

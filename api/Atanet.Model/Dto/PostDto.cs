@@ -16,8 +16,6 @@
 
         public UserDto User { get; set; }
 
-        public PictureDto Picture { get; set; }
-
         public CommentDto[] Comments { get; set; }
 
         public IDictionary<ReactionState, int> Reactions { get; set; }
