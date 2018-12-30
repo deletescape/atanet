@@ -3,6 +3,7 @@ import { User } from '../../model/user.model';
 import { ConfigService } from '../../config';
 import { UserHttpService } from '../../services';
 import { UserWithScore } from '../../model/user-with-score.model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-item',
@@ -18,7 +19,7 @@ export class UserItemComponent implements OnInit, AfterViewInit {
 
   private _hasFullInfo: boolean | undefined = undefined;
 
-  constructor(private configService: ConfigService, private userHttpService: UserHttpService) {
+  constructor(public domSanitizer: DomSanitizer, private configService: ConfigService, private userHttpService: UserHttpService) {
     this._id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 36);
   }
 
@@ -33,9 +34,14 @@ export class UserItemComponent implements OnInit, AfterViewInit {
     this._userInfo = new User();
     this._userInfo.email = userWithScore.email;
     this._userInfo.id = userWithScore.id;
+    this._userInfo.picture = userWithScore.picture;
     this._joined = userWithScore.created;
     this._score = userWithScore.score;
     this._hasFullInfo = true;
+  }
+
+  public get userInfo(): User {
+    return this._userInfo;
   }
 
   public get id(): string {

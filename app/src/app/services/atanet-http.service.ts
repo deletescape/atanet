@@ -4,13 +4,11 @@ import { HttpClient } from '@angular/common/http';
 
 import { SnackbarService } from './snackbar.service';
 import * as moment from 'moment';
-import { BadRequest } from '../model';
+import { BadRequest, Picture, Comment, User } from '../model';
 import { ConfigService } from '../config';
 import { AuthService } from 'angular-6-social-login';
 import { Observable } from 'rxjs';
 import { Reaction } from '../model/reaction.model';
-import { User } from '../model/user.model';
-import { Comment } from '../model/comment.model';
 
 declare type ConstructorType = { new(): any };
 
@@ -20,7 +18,7 @@ export class AtanetHttpService {
   private readonly propertyAdapters: { propertyName: string, constructor: ConstructorType, isArray: boolean }[] = [];
   private token: string;
 
-  constructor(private httpClient: HttpClient, private snackbarService: SnackbarService, private configService: ConfigService, private authService: AuthService) {
+  constructor(private httpClient: HttpClient, private snackbarService: SnackbarService, private configService: ConfigService) {
     this.baseUri = this.configService.config.baseUrl;
     this.registerAdapters();
   }
@@ -164,6 +162,11 @@ export class AtanetHttpService {
     this.propertyAdapters.push({
       propertyName: 'user',
       constructor: User,
+      isArray: false
+    });
+    this.propertyAdapters.push({
+      propertyName: 'picture',
+      constructor: Picture,
       isArray: false
     });
   }

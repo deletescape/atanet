@@ -2,7 +2,7 @@
     <mat-card class="mat-elevation-z10">
       <div>
         <div class="image-container">
-            <img mat-card-image [id]="'post-image-' + post.id" class="mat-elevation-z10" [src]="pictureUrl | secure | async">
+            <img mat-card-image [id]="'post-image-' + post.id" class="mat-elevation-z10" [src]="post && post.picture.imageSource(domSanitizer)">
         </div>
         <mat-card-subtitle>
           <div class="post-metadata">

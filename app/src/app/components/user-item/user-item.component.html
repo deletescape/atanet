@@ -1,6 +1,6 @@
 <div class="user-container">
   <div class="user-profile-img">
-    <img [id]="id" [src]="userPictureUrl | secure | async" />
+    <img [id]="id" [src]="userInfo.picture.imageSource(domSanitizer)" />
   </div>
   <div>
     <p class="right-text" [routerLink]="['/user/' + userId]">

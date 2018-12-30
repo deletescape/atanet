@@ -5,6 +5,7 @@ import { Comment } from '../../model/comment.model';
 import { CommentHttpService } from '../../services';
 import { ConfigService } from '../../config';
 import { User } from '../../model/user.model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-comments',
@@ -16,7 +17,7 @@ export class CommentsComponent implements AfterViewInit {
   private _post: Post = undefined;
   private readonly _id: string;
 
-  constructor(private commentHttpService: CommentHttpService, private configService: ConfigService) {
+  constructor(public domSanitizer: DomSanitizer, private commentHttpService: CommentHttpService, private configService: ConfigService) {
     this._id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 36);
   }
 
@@ -35,10 +36,6 @@ export class CommentsComponent implements AfterViewInit {
 
   public get comments(): Comment[] {
     return this._post.comments;
-  }
-
-  public getPictureUrl(id: number): string {
-    return this.configService.config.baseUrl + 'users/picture?id=' + id;
   }
 
   public addComment(): void {

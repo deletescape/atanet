@@ -1,7 +1,7 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import { Post } from '../../model';
-import { ConfigService } from '../../config';
 import { PostReactionService } from '../../services';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post',
@@ -12,12 +12,8 @@ export class PostComponent implements AfterViewInit {
   private _internalPost: Post;
 
   constructor(
-    private configService: ConfigService,
+    public domSanitizer: DomSanitizer,
     private postReactionService: PostReactionService) {
-  }
-
-  public get pictureUrl(): string {
-    return this.configService.config.baseUrl + `posts/${this._internalPost.id}/picture`;
   }
 
   @Input()

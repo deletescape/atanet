@@ -26,7 +26,7 @@ export class UserHttpService {
 
     const uri = `users/${userId}`;
     const result = await this.httpService.get(uri, ShowUserInfo);
-    this.userInfoCache[userId] = result;
+    // this.userInfoCache[userId] = result;
     return result;
   }
 

@@ -68,9 +68,10 @@
             var fetchedPage = orderedQuery.Skip(pageSize * page).Take(pageSize);
             var results =
                 from post in fetchedPage
-                join user in this.queryService.Query<User>() on post.Post.UserId equals user.Id
+                join user in this.queryService.Query<User>().Include(x => x.Picture) on post.Post.UserId equals user.Id
                 join reaction in this.queryService.Query<PostReaction>() on post.Post.Id equals reaction.PostId into reactions
-                join comment in this.queryService.Query<Comment>().Include(x => x.User) on post.Post.Id equals comment.PostId into comments
+                join comment in this.queryService.Query<Comment>().Include(x => x.User.Picture) on post.Post.Id equals comment.PostId into comments
+                join postPicture in this.queryService.Query<File>() on post.Post.PictureId equals postPicture.Id
                 select new PostDto
                 {
                     Created = post.Post.Created,
@@ -78,10 +79,20 @@
                     Id = post.Post.Id,
                     Reactions = reactions.GroupBy(x => x.ReactionState).ToDictionary(x => x.Key, x => x.Count()),
                     Text = post.Post.Text,
+                    Picture = new PictureDto
+                    {
+                        Base64Data = Convert.ToBase64String(postPicture.Data),
+                        ContentType = postPicture.ContentType
+                    },
                     User = new UserDto
                     {
                         Email = user.Email,
-                        Id = user.Id
+                        Id = user.Id,
+                        Picture = new PictureDto
+                        {
+                            Base64Data = Convert.ToBase64String(user.Picture.Data),
+                            ContentType = user.Picture.ContentType
+                        }
                     },
                     Comments = comments.Select(x => new CommentDto
                     {
@@ -92,7 +103,12 @@
                         User = new UserDto
                         {
                             Email = x.User.Email,
-                            Id = x.UserId
+                            Id = x.UserId,
+                            Picture = new PictureDto
+                            {
+                                Base64Data = Convert.ToBase64String(x.User.Picture.Data),
+                                ContentType = x.User.Picture.ContentType
+                            }
                         }
                     }).OrderByDescending(x => x.Created).Take(commentCount).ToArray()
                 };
