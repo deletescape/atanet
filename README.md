@@ -7,6 +7,8 @@ The technologies used in this project are ASP.NET Core, Flask, TensorFlow and An
 
 `docker volume create atanet-volume`
 
+Generate a client id in your Google Cloud Console.
+
 Add `.env` file and replace `client_id` with generated Google Client ID.
 Also update the `clientId` in `app/src/assets/Development.config.json`, `app/src/assets/Production.config.json` and `app/src/assets/.config.json`.
 
@@ -29,7 +31,7 @@ ASPNETCORE_URLS=http://localhost:9000
 Create certifictes for nginx reverse proxy:
 `openssl req -x509 -newkey rsa:4096 -nodes -out ./nginx/config/cert.pem -keyout ./nginx/config/key.pem -days 365`
 
-`docker-compose up`
+`docker-compose up --build`
 
 # Connecting to database:
 `mysql -u atanet -h 172.19.0.1 -P 9001 -D Atanet -p`
