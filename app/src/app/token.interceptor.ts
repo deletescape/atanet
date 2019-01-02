@@ -12,7 +12,6 @@ export class TokenInterceptor implements HttpInterceptor {
     constructor(private readonly auth: AuthService) { }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // TODO: early return with token from localStorage
         return this.auth.authState.mergeMap(socialUser => {
             if (!socialUser) {
                 return Observable.empty().toPromise();
