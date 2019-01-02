@@ -15,6 +15,7 @@ Also update the `clientId` in `app/src/assets/Development.config.json`, `app/src
 ```
 ASPNETCORE_ENVIRONMENT=Development
 GOOGLE_CLIENT_ID=client_id
+SCOREBOARD_ENTRIES=5
 
 MYSQL_ROOT_PASSWORD=password
 MYSQL_USER=atanet

@@ -29,8 +29,6 @@ namespace Atanet.Services.Scoring
 
         private readonly long PostConstant = 20;
 
-        private readonly int TopScoreboard = 10;
-
         public ScoreService(IQueryService queryService, IApiResultService apiResultService)
         {
             this.queryService = queryService;
@@ -50,9 +48,10 @@ namespace Atanet.Services.Scoring
 
         public IList<UserWithScoreDto> GetUsersSortedByScore()
         {
+            var topEntries = int.Parse(Environment.GetEnvironmentVariable("SCOREBOARD_ENTRIES"));
             return this.GetUsersByScoreQuery()
                 .OrderByDescending(x => x.Score)
-                .Take(TopScoreboard).ToList();
+                .Take(topEntries).ToList();
         }
 
         public IQueryable<PostWithScoreDto> GetEnrichedPosts(bool withTimeInCalculation)
