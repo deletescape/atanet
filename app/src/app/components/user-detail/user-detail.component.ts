@@ -46,7 +46,6 @@ export class UserDetailComponent implements OnInit {
       this.router.navigate(['']);
     }).catch(_ => {
       this.buttonDisabled = false;
-      this.snackbarService.showMessage('Failed to delete user');
     });
   }
 
