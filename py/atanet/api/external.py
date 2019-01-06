@@ -10,8 +10,7 @@ import numpy as np
 from atanet.sentiment.language.language import Language
 
 
-HOME_DIR = os.path.expanduser('~')
-DATA_DIR = os.path.join(HOME_DIR, '.ipublia', 'data', 'sentiment-analysis')
+DATA_DIR = os.path.join('/var/data/ipublia')
 REMOTE_DATA_URL = 'https://www.ipublia.com/data/sentiment-analysis'
 MAX_TEXT_LENGTH = 400
 

@@ -5,7 +5,9 @@ The technologies used in this project are ASP.NET Core, Flask, TensorFlow and An
 # Running locally
 `docker network create atanet-network`
 
-`docker volume create atanet-volume`
+`docker volume create atanet-db-volume`
+
+`docker volume create atanet-py-volume`
 
 Generate a client id in your Google Cloud Console.
 

@@ -21,7 +21,7 @@ services:
     restart: always
     command: --max_allowed_packet=32505856
     volumes:
-      - atanet-volume:/var/lib/mysql
+      - atanet-db-volume:/var/lib/mysql
     restart: always
     ports:
       - 9001:3306
@@ -57,6 +57,8 @@ services:
       - ./.env
     ports:
       - 9003:9003
+    volumes:
+      - atanet-db-volume:/var/data/ipublia
     command: ["python", "-m", "atanet", "serve"]
     networks:
       - default
@@ -86,5 +88,7 @@ networks:
       name: atanet-network
 
 volumes:
-  atanet-volume:
+  atanet-db-volume:
+    external: true
+  atanet-py-volume:
     external: true
