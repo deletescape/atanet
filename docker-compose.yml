@@ -58,7 +58,7 @@ services:
     ports:
       - 9003:9003
     volumes:
-      - atanet-db-volume:/var/data/ipublia
+      - atanet-py-volume:/var/data/ipublia
     command: ["python", "-m", "atanet", "serve"]
     networks:
       - default
